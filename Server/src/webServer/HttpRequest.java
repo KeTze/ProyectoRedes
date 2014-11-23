@@ -9,6 +9,7 @@ final class HttpRequest implements Runnable {
 
   final static String CRLF = "\r\n";
   SocketManager sockManager;
+  int estado;
 
   // Constructor
   public HttpRequest(SocketManager sockMan) throws Exception {
@@ -32,6 +33,32 @@ final class HttpRequest implements Runnable {
     System.out.println("RequestLine: " + requestLine);
     sockManager.Escribir(requestLine+ '\n');
     
+    switch (estado) {
+		case 0:
+	    	if ( true/*comando.equals(“USUARIO”)*/) {
+	    	
+	    	}else{
+	    	}
+    	break;
+    	case 1:
+        	if ( true/*comando.equals(“CLAVE”)*/) {
+        	
+        	}else{
+        	}
+        break;
+    	case 2:
+        	if ( true/*comando.equals(“MUCHOSCOMANDOS”)*/) {
+        	
+        	}else if (true /*OTROSTANTOSCOMANDOS*/){
+        	}
+        break;
+        case 3:
+			if ( true/*comando.equals(“ACCION”)*/) {
+		    	
+			}else{
+			}
+		break;
+    }
    }
 /*
     // Display the request line.
