@@ -37,16 +37,42 @@ final class HttpRequest implements Runnable {
     
     switch (estado) {
 		case 0:
+			/*USER Markel 200 OK Bienvenido Markel.
+			USER 400 ERR Falta el nombre de usuario.
+			USER Fernando 401 ERR Usuario desconocido.
+			*/
 	    	if (comando.equals("USER")) {
-	    	
+	    		if(rl.length == 1){
+	    			System.out.println("USER 400 ERR Falta el nombre de usuario.");
+	    		}else{
+	    			String user = rl[1];
+	    			if(true /*user.existeUsuario*/){
+	    				System.out.println("USER "+user+" 200 OK Bienvenido "+user+".");
+	    			}else{
+	    				System.out.println("USER "+user+" 401 ERR Usuario desconocido.");
+	    			}
+	    		}
 	    	}else{
 	    	}
     	break;
     	case 1:
-        	if ( comando.equals("PASS")) {
-        	
-        	}else{
-        	}
+    		/*PASS 94475 201 OK Bienvenido al sistema.
+			PASS mqm 401 ERR La clave es incorrecta.
+			PASS 402 ERR Falta la clave.
+    		 */
+    		if (comando.equals("PASS")) {
+	    		if(rl.length == 1){
+	    			System.out.println("PASS 402 ERR Falta la clave.");
+	    		}else{
+	    			String pass = rl[1];
+	    			if(true /*pass.existePass*/){
+	    				System.out.println("PASS "+pass+" 201 OK Bienvenido al sistema.");
+	    			}else{
+	    				System.out.println("PASS "+pass+" 401 ERR La clave es incorrecta.");
+	    			}
+	    		}
+	    	}else{
+	    	}
         break;
     	case 2:
         	if (comando.equals("LISTADO")) {
