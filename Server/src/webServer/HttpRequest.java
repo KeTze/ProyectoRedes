@@ -80,22 +80,55 @@ final class HttpRequest implements Runnable {
         	}else if (comando.equals("BUSCAR")){
         		
         	}else if (comando.equals("ON")){
+        		/*ON placa1 temperatura 203 OK Control de temperatura activo.
+				ON placa1 temp 403 ERROR id_variable no existe.
+				ON placa1 temperatura 404 ERROR id_variable en estado ON.
+				*/
+        		String id_placa = rl[1];
+        		String id_variable = rl[2];
+    			if(true /*id_variable.existeVariable*/){
+    				System.out.println("ON placa1 temperatura 203 OK Control de temperatura activo.");
+    			}else if(true /*id_variable.estadoON?*/){
+    				System.out.println("ON placa1 temperatura 404 ERROR id_variable en estado ON.");
+    			}else if(true /*!id_variable.existeVariable*/){
+    				System.out.println("ON placa1 temp 403 ERROR id_variable no existe.");
         		
 			}else if (comando.equals("OFF")){
-        		
+				/*OFF placa1 temperatura 204 OK Control de temperatura desactivado.
+				OFF placa1 temp 405 ERROR id_variable no existe.
+				OFF placa1 temperatura 406 ERROR id_variable en estado OFF.
+				*/
+				if(true /*id_variable.existeVariable*/){
+    				System.out.println("OFF placa1 temperatura 204 OK Control de temperatura desactivado.");
+    			}else if(true /*id_variable.estadoON?*/){
+    				System.out.println("OFF placa1 temperatura 406 ERROR id_variable en estado OFF.");
+    			}else if(true /*!id_variable.existeVariable*/){
+    				System.out.println("OFF placa1 temp 405 ERROR id_variable no existe.");
+    			}
 			}else if (comando.equals("ACCION")){
         		
 			}else if (comando.equals("OBTENER_FOTO")){
-        		
+				// Me da error? String id_placa = rl[1];
+    			if(true /*id_placa.existePlaca*/){
+    				System.out.println("OBTENER_FOTO "+id_placa+" 206 OK (MÉTODONºBYTES) bytes transmitiendo.");
+    			}else{
+    				System.out.println("OBTENER_FOTO "+id_placa+" 403 ERR Identificador no existe.");
+    			}
 			}else if (comando.equals("SALIR")){
-        		
+        		System.out.println("SALIR 208 OK Adiós.");
 			}
-        break;
+        }break;
         case 3:
 			if (comando.equals("CONFIRMAR_ACCION")) {
-		    	
+				if(rl.length == 1){
+	    			System.out.println("CONFIRMAR_ACCION 409 ERR Faltan datos.");
+	    		}else{
+	    			String parametro = rl[1];
+	    			System.out.println("CONFIRMAR_ACCION "+parametro+" 206 OK Acción sobre el sensor confirmada.");
+	    		}
+				
 			}else if (comando.equals("RECHAZAR_ACCION")){
-        		
+        		System.out.println("RECHAZAR_ACCION 207 OK Acción cancelada");
 			}
 		break;
     }
