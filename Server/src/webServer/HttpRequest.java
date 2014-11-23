@@ -29,33 +29,47 @@ final class HttpRequest implements Runnable {
   private void processRequest() throws Exception {
     // Get the request line of the HTTP request message.
    while (true){
-	  String requestLine = sockManager.Leer();
+	 String requestLine = sockManager.Leer();
     System.out.println("RequestLine: " + requestLine);
     sockManager.Escribir(requestLine+ '\n');
+    String[] rl = requestLine.split(" ");
+    String comando = rl[0];
     
     switch (estado) {
 		case 0:
-	    	if ( true/*comando.equals(“USUARIO”)*/) {
+	    	if (comando.equals("USER")) {
 	    	
 	    	}else{
 	    	}
     	break;
     	case 1:
-        	if ( true/*comando.equals(“CLAVE”)*/) {
+        	if ( comando.equals("PASS")) {
         	
         	}else{
         	}
         break;
     	case 2:
-        	if ( true/*comando.equals(“MUCHOSCOMANDOS”)*/) {
+        	if (comando.equals("LISTADO")) {
         	
-        	}else if (true /*OTROSTANTOSCOMANDOS*/){
-        	}
+        	}else if (comando.equals("BUSCAR")){
+        		
+        	}else if (comando.equals("ON")){
+        		
+			}else if (comando.equals("OFF")){
+        		
+			}else if (comando.equals("ACCION")){
+        		
+			}else if (comando.equals("OBTENER_FOTO")){
+        		
+			}else if (comando.equals("SALIR")){
+        		
+			}
         break;
         case 3:
-			if ( true/*comando.equals(“ACCION”)*/) {
+			if (comando.equals("CONFIRMAR_ACCION")) {
 		    	
-			}else{
+			}else if (comando.equals("RECHAZAR_ACCION")){
+        		
 			}
 		break;
     }
