@@ -32,43 +32,36 @@ final class HttpRequest implements Runnable {
 	 String requestLine = sockManager.Leer();
     System.out.println("RequestLine: " + requestLine);
     sockManager.Escribir(requestLine+ '\n');
+    String user = null;
     String[] rl = requestLine.split(" ");
     String comando = rl[0];
     
     switch (estado) {
 		case 0:
-			/*USER Markel 200 OK Bienvenido Markel.
-			USER 400 ERR Falta el nombre de usuario.
-			USER Fernando 401 ERR Usuario desconocido.
-			*/
 	    	if (comando.equals("USER")) {
 	    		if(rl.length == 1){
-	    			System.out.println("USER 400 ERR Falta el nombre de usuario.");
+	    			System.out.println("400 ERR Falta el nombre de usuario.");
 	    		}else{
-	    			String user = rl[1];
-	    			if(true /*user.existeUsuario*/){
-	    				System.out.println("USER "+user+" 200 OK Bienvenido "+user+".");
+	    			user = rl[1];
+	    			if(BaseDatos.existeUsuario(user)){
+	    				System.out.println("200 OK Bienvenido "+user+".");
 	    			}else{
-	    				System.out.println("USER "+user+" 401 ERR Usuario desconocido.");
+	    				System.out.println("401 ERR Usuario desconocido.");
 	    			}
 	    		}
 	    	}else{
 	    	}
     	break;
     	case 1:
-    		/*PASS 94475 201 OK Bienvenido al sistema.
-			PASS mqm 401 ERR La clave es incorrecta.
-			PASS 402 ERR Falta la clave.
-    		 */
     		if (comando.equals("PASS")) {
 	    		if(rl.length == 1){
-	    			System.out.println("PASS 402 ERR Falta la clave.");
+	    			System.out.println("402 ERR Falta la clave.");
 	    		}else{
 	    			String pass = rl[1];
-	    			if(true /*pass.existePass*/){
-	    				System.out.println("PASS "+pass+" 201 OK Bienvenido al sistema.");
+	    			if(BaseDatos.comprobarPass(user, pass)){
+	    				System.out.println("201 OK Bienvenido al sistema.");
 	    			}else{
-	    				System.out.println("PASS "+pass+" 401 ERR La clave es incorrecta.");
+	    				System.out.println("401 ERR La clave es incorrecta.");
 	    			}
 	    		}
 	    	}else{
@@ -76,59 +69,67 @@ final class HttpRequest implements Runnable {
         break;
     	case 2:
         	if (comando.equals("LISTADO")) {
-        	
+        		ArrayList<String> listado = BaseDatos.listaObjetos();
+        		for(int i = 0; i < listado.size();i++)
+        		{
+        			System.out.println(listado.get(i));
+        		}
+        		System.out.println("/n");
+        		System.out.println("202 FINLISTA");
+        		
         	}else if (comando.equals("BUSCAR")){
+        		ArrayList<String> listado = BaseDatos.buscarObjetos(rl[1], rl[2]);
+        		for(int i = 0; i < listado.size();i++)
+        		{
+        			System.out.println(listado.get(i));
+        		}
+        		System.out.println("/n");
+        		System.out.println("202 FINLISTA");
         		
         	}else if (comando.equals("ON")){
-        		/*ON placa1 temperatura 203 OK Control de temperatura activo.
-				ON placa1 temp 403 ERROR id_variable no existe.
-				ON placa1 temperatura 404 ERROR id_variable en estado ON.
-				*/
         		String id_placa = rl[1];
         		String id_variable = rl[2];
     			if(true /*id_variable.existeVariable*/){
-    				System.out.println("ON placa1 temperatura 203 OK Control de temperatura activo.");
+    				System.out.println("203 OK Control de temperatura activo.");
     			}else if(true /*id_variable.estadoON?*/){
-    				System.out.println("ON placa1 temperatura 404 ERROR id_variable en estado ON.");
+    				System.out.println("404 ERROR id_variable en estado ON.");
     			}else if(true /*!id_variable.existeVariable*/){
-    				System.out.println("ON placa1 temp 403 ERROR id_variable no existe.");
-        		
-			}else if (comando.equals("OFF")){
-				/*OFF placa1 temperatura 204 OK Control de temperatura desactivado.
-				OFF placa1 temp 405 ERROR id_variable no existe.
-				OFF placa1 temperatura 406 ERROR id_variable en estado OFF.
-				*/
-				if(true /*id_variable.existeVariable*/){
-    				System.out.println("OFF placa1 temperatura 204 OK Control de temperatura desactivado.");
-    			}else if(true /*id_variable.estadoON?*/){
-    				System.out.println("OFF placa1 temperatura 406 ERROR id_variable en estado OFF.");
-    			}else if(true /*!id_variable.existeVariable*/){
-    				System.out.println("OFF placa1 temp 405 ERROR id_variable no existe.");
+    				System.out.println("403 ERROR id_variable no existe.");
     			}
+    			
+			}else if (comando.equals("OFF")){
+				if(true /*id_variable.existeVariable*/){
+    				System.out.println("204 OK Control de temperatura desactivado.");
+    			}else if(true /*id_variable.estadoON?*/){
+    				System.out.println("406 ERROR id_variable en estado OFF.");
+    			}else if(true /*!id_variable.existeVariable*/){
+    				System.out.println("405 ERROR id_variable no existe.");
+    			}
+				
 			}else if (comando.equals("ACCION")){
         		
 			}else if (comando.equals("OBTENER_FOTO")){
-				// Me da error? String id_placa = rl[1];
+				String id_placa = rl[1];
     			if(true /*id_placa.existePlaca*/){
-    				System.out.println("OBTENER_FOTO "+id_placa+" 206 OK (MÉTODONºBYTES) bytes transmitiendo.");
+    				System.out.println("206 OK (MÉTODONºBYTES) bytes transmitiendo.");
     			}else{
-    				System.out.println("OBTENER_FOTO "+id_placa+" 403 ERR Identificador no existe.");
+    				System.out.println("403 ERR Identificador no existe.");
     			}
 			}else if (comando.equals("SALIR")){
-        		System.out.println("SALIR 208 OK Adiós.");
+        		System.out.println("208 OK Adiós.");
 			}
-        }break;
+        break;
         case 3:
 			if (comando.equals("CONFIRMAR_ACCION")) {
 				if(rl.length == 1){
-	    			System.out.println("CONFIRMAR_ACCION 409 ERR Faltan datos.");
+	    			System.out.println("409 ERR Faltan datos.");
 	    		}else{
 	    			String parametro = rl[1];
-	    			System.out.println("CONFIRMAR_ACCION "+parametro+" 206 OK Acción sobre el sensor confirmada.");
+	    			System.out.println("206 OK Acción sobre el sensor confirmada.");
 	    		}
 				
 			}else if (comando.equals("RECHAZAR_ACCION")){
-        		System.out.println("RECHAZAR_ACCION 207 OK Acción cancelada");
+        		System.out.println("207 OK Acción cancelada");
 			}
 		break;
     }
