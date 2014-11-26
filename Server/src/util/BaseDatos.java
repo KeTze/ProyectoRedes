@@ -49,7 +49,7 @@ public class BaseDatos {
 		}
 	}
 
-	public boolean existeUsuario(String n) throws ClassNotFoundException, SQLException
+	public static boolean existeUsuario(String n) throws ClassNotFoundException, SQLException
 	 {
 	  connect();
 	  Statement stat = conn.createStatement();
@@ -68,7 +68,7 @@ public class BaseDatos {
 	   return enc;
 	 }
 	
-	public boolean comprobarPass(String n, String con) throws ClassNotFoundException, SQLException
+	public static boolean comprobarPass(String n, String con) throws ClassNotFoundException, SQLException
 	 {
 	  connect();
 	  Statement stat = conn.createStatement();
