@@ -140,4 +140,28 @@ public class BaseDatos {
 	}
 
 	
+	public static ArrayList<String>buscarObjetos(String opcion, String patron) throws ClassNotFoundException, SQLException{
+		ArrayList<String>aLObjetos=new ArrayList<String>();
+		connect();
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+				+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE)");
+		int numElem = 0;
+		while (rs.next()) {	
+			String s = "ELEM "+numElem+" "+rs.getString("ID")+"; "+rs.getString("NOMBRE")+"; "+rs.getString("FUNCION_PRINC")+"; ";
+			if(rs.getBoolean("ESTADO")){
+				s = s+"ON; ";
+			}else{
+				s = s+"OFF; ";
+			}
+			s = s+rs.getString("NOM_ACCION");
+			aLObjetos.add(s);
+		}
+		
+		rs.close();
+		stat.close();
+		disconnect();	
+		return aLObjetos; 
+	}
+	
 }
