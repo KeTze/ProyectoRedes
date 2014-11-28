@@ -206,9 +206,14 @@ public class BaseDatos {
 		ResultSet rs = stat.executeQuery("select ESTADO from VARIABLE V, PL_VAR, PLACA P where "
 				+ "V.ID=PL.ID_VARIABLE AND PL.ID_PLACA=P.ID AND NOMBRE='"+variable+"' AND P.ID='"+placa+"'");
 		boolean estado = false;
-		while(rs.next()){
+		
+		if(rs.next()){
 			estado = rs.getBoolean("ESTADO");
+		}else{
+			throw new SQLException("Not Found");
 		}
+		
+		
 		stat.close();
 		return estado;
 		

@@ -1,5 +1,6 @@
 package tcpClient;
 import util.*;
+
 import java.net.*;
 import java.io.*;
 
@@ -16,6 +17,33 @@ import java.io.*;
  * @version 1.0
  */
 public class TCPClient {
+	private static SocketManager sm;
+	public static void conectar(String ip, int puerto) throws IOException{
+		
+		sm = new SocketManager(ip, puerto);
+		
+	}
+	
+	public static void desconectar() throws IOException{
+		sm.CerrarSocket();
+	}
+	
+	public static String iniciarSesion(String nombre, String pass) throws IOException{
+		sm.Escribir("USER "+nombre+'\n');
+		String s = sm.Leer();
+		
+		if(s.charAt(0)=='4'){
+			return s;
+		}else{
+			sm.Escribir("PASS "+pass+'\n');
+			s = sm.Leer();
+			return s;
+		}
+		
+	}
+	
+	
+	
     public static void main(String[] args) throws Exception {
         String sentence=""; //Variable dnd se almacena la frase introducida por el usuario
         String modifiedSentence=""; //Variable dnd se recibe la frase capitalizada

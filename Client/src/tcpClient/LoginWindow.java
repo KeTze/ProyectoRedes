@@ -3,7 +3,6 @@ package tcpClient;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -20,6 +19,8 @@ import javax.swing.JPasswordField;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
@@ -162,7 +163,11 @@ public class LoginWindow extends JFrame{
 	}
 
 	private void eventos() {
-		/*
+		btnLogin.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -195,7 +200,7 @@ public class LoginWindow extends JFrame{
 				i++;
 			}
 		});
-	*/
+	
 	}
 	
 	private JFrame getFrame(){
