@@ -49,9 +49,9 @@ public class BaseDatos {
 		}
 	}
 
-	public static boolean existeUsuario(String n) throws ClassNotFoundException, SQLException
+	public static boolean existeUsuario(String n) throws SQLException
 	 {
-	  connect();
+	  
 	  Statement stat = conn.createStatement();
 	  ResultSet rs = stat.executeQuery("SELECT nombre FROM USUARIO where nombre='"+n+"'");
 	  boolean enc=false;
@@ -64,13 +64,13 @@ public class BaseDatos {
 	   }
 	   rs.close();
 	   stat.close();
-	   disconnect();
+	   
 	   return enc;
 	 }
 	
-	public static boolean comprobarPass(String n, String con) throws ClassNotFoundException, SQLException
+	public static boolean comprobarPass(String n, String con) throws SQLException
 	 {
-	  connect();
+	  
 	  Statement stat = conn.createStatement();
 	  ResultSet rs = stat.executeQuery("SELECT pass FROM USUARIO where nombre='"+n+"'");
 	  boolean enc=false;
@@ -83,7 +83,7 @@ public class BaseDatos {
 	   }
 	   rs.close();
 	   stat.close();
-	   disconnect();
+	   
 	   return enc;
 	 }
 	
@@ -96,7 +96,7 @@ public class BaseDatos {
 	 * @throws SQLException
 	 * @throws RowNotFoundException
 	 */
-	public static void gestionarLibro(String isbn,int precioV,int precioAl) throws ClassNotFoundException, SQLException, RowNotFoundException{
+	/*public static void gestionarLibro(String isbn,int precioV,int precioAl) throws ClassNotFoundException, SQLException, RowNotFoundException{
 		Libro l = BaseDatos.obtenerLibro(isbn);
 		if(l==null){
 			throw new RowNotFoundException();
@@ -107,7 +107,7 @@ public class BaseDatos {
 		stat.executeUpdate("UPDATE Libros SET precio_al="+precioAl+" where isbn='"+isbn+"'");
 		stat.close();
 		disconnect();	
-	}
+	}*/
 	
 	/**
 	 * Sirve para devolver una lista de todos los objetos del sistema
@@ -115,9 +115,9 @@ public class BaseDatos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public static ArrayList<String>listaObjetos() throws ClassNotFoundException, SQLException{
+	public static ArrayList<String>listaObjetos() throws SQLException{
 		ArrayList<String>aLObjetos=new ArrayList<String>();
-		connect();
+		
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
 				+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE)");
@@ -135,14 +135,14 @@ public class BaseDatos {
 		
 		rs.close();
 		stat.close();
-		disconnect();	
+			
 		return aLObjetos; 
 	}
 
-	
-	public static ArrayList<String>buscarObjetos(String opcion, String patron) throws ClassNotFoundException, SQLException{
+	//A editar
+	public static ArrayList<String>buscarObjetos(String opcion, String patron) throws SQLException{
 		ArrayList<String>aLObjetos=new ArrayList<String>();
-		connect();
+		
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
 				+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE)");
@@ -160,8 +160,103 @@ public class BaseDatos {
 		
 		rs.close();
 		stat.close();
-		disconnect();	
+			
 		return aLObjetos; 
+	}
+	
+
+	public void encenderVariable(String placa, String variable) throws SQLException{
+		
+		Statement stat2 = conn.createStatement();
+		ResultSet rs = stat2.executeQuery("select ID_VARIABLE from VARIABLE V, PL_VAR, PLACA P where "
+				+ "V.ID=PL.ID_VARIABLE AND PL.ID_PLACA=P.ID AND NOMBRE='"+variable+"' AND P.ID='"+placa+"'");
+		int idVariable = 0;
+		while(rs.next()){
+			idVariable = rs.getInt("ID_VARIABLE");
+		}
+		stat2.close();
+		Statement stat = conn.createStatement();
+		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=1 where ID_VARIABLE="+idVariable+" AND ID_PLACA='"
+				+variable+"'");
+		stat.close();
+		
+	}
+	
+	public void apagarVariable(String placa, String variable) throws SQLException{
+		
+		Statement stat2 = conn.createStatement();
+		ResultSet rs = stat2.executeQuery("select ID_VARIABLE from VARIABLE V, PL_VAR, PLACA P where "
+				+ "V.ID=PL.ID_VARIABLE AND PL.ID_PLACA=P.ID AND NOMBRE='"+variable+"' AND P.ID='"+placa+"'");
+		int idVariable = 0;
+		while(rs.next()){
+			idVariable = rs.getInt("ID_VARIABLE");
+		}
+		stat2.close();
+		
+		Statement stat = conn.createStatement();
+		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=0 where ID_VARIABLE="+idVariable+" AND ID_PLACA='"
+				+variable+"'");
+		stat.close();
+		
+	}
+	
+	public boolean estadoVariable(String placa, String variable) throws SQLException{
+		
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select ESTADO from VARIABLE V, PL_VAR, PLACA P where "
+				+ "V.ID=PL.ID_VARIABLE AND PL.ID_PLACA=P.ID AND NOMBRE='"+variable+"' AND P.ID='"+placa+"'");
+		boolean estado = false;
+		while(rs.next()){
+			estado = rs.getBoolean("ESTADO");
+		}
+		stat.close();
+		return estado;
+		
+	}
+	
+	public boolean estadoPlaca(String placa) throws SQLException{
+		
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select ESTADO from PLACA P where ID='"+placa+"'");
+		boolean estado = false;
+		while(rs.next()){
+			estado = rs.getBoolean("ESTADO");
+		}
+		stat.close();
+		return estado;
+		
+	}
+	
+	public void cambiarUltimaAccion(String placa, String variable, String accion) throws SQLException{
+		
+	}
+	
+	public String obtenerFoto(String placa) throws SQLException{
+		return null;
+	}
+	
+	public void anyadirUsuario(String nombre, String pass) throws SQLException{
+		
+	}
+	
+	public void borrarUsuario(String nombre) throws SQLException{
+		
+	}
+	
+	public void cambiarNombreUsuario(String nombre, String pass) throws SQLException{
+		
+	}
+	
+	public void cambiarPassUsuario(String nombre, String pass) throws SQLException{
+		
+	}
+	
+	public void anyadirAccionAVariable(String placa, String variable, String accion) throws SQLException{
+		
+	}
+	
+	public void reiniciarVariable(String placa, String variable, String accion) throws SQLException{
+		
 	}
 	
 }
