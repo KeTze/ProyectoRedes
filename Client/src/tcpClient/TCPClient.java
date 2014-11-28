@@ -31,12 +31,13 @@ public class TCPClient {
 	public static String iniciarSesion(String nombre, String pass) throws IOException{
 		sm.Escribir("USER "+nombre+'\n');
 		String s = sm.Leer();
-		
+		System.out.println(s);
 		if(s.charAt(0)=='4'){
 			return s;
 		}else{
 			sm.Escribir("PASS "+pass+'\n');
 			s = sm.Leer();
+			System.out.println(s);
 			return s;
 		}
 		
