@@ -3,7 +3,8 @@ package webServer;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import util.*;
+import util.BaseDatos;
+import util.SocketManager;
 
 final class HttpRequest implements Runnable {
 
@@ -12,7 +13,7 @@ final class HttpRequest implements Runnable {
   int estado;
 
   // Constructor
-  public HttpRequest(SocketManager sockMan) throws Exception {
+  public HttpRequest(SocketManager sockMan) {
     sockManager = sockMan;
   }
 
@@ -91,16 +92,18 @@ final class HttpRequest implements Runnable {
         		String id_variable = rl[2];
     			if(true /*id_variable.existeVariable*/){
     				System.out.println("203 OK Control de temperatura activo.");
-    			}else if(true /*id_variable.estadoON?*/){
+    			}else if(BaseDatos.estadoVariable(id_placa, id_variable)){
     				System.out.println("404 ERROR id_variable en estado ON.");
     			}else if(true /*!id_variable.existeVariable*/){
     				System.out.println("403 ERROR id_variable no existe.");
     			}
     			
 			}else if (comando.equals("OFF")){
+				String id_placa = rl[1];
+        		String id_variable = rl[2];
 				if(true /*id_variable.existeVariable*/){
     				System.out.println("204 OK Control de temperatura desactivado.");
-    			}else if(true /*id_variable.estadoON?*/){
+    			}else if(!BaseDatos.estadoVariable(id_placa, id_variable)){
     				System.out.println("406 ERROR id_variable en estado OFF.");
     			}else if(true /*!id_variable.existeVariable*/){
     				System.out.println("405 ERROR id_variable no existe.");

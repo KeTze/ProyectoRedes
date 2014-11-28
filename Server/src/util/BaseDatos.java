@@ -165,7 +165,7 @@ public class BaseDatos {
 	}
 	
 
-	public void encenderVariable(String placa, String variable) throws SQLException{
+	public static void encenderVariable(String placa, String variable) throws SQLException{
 		
 		Statement stat2 = conn.createStatement();
 		ResultSet rs = stat2.executeQuery("select ID_VARIABLE from VARIABLE V, PL_VAR, PLACA P where "
@@ -182,7 +182,7 @@ public class BaseDatos {
 		
 	}
 	
-	public void apagarVariable(String placa, String variable) throws SQLException{
+	public static void apagarVariable(String placa, String variable) throws SQLException{
 		
 		Statement stat2 = conn.createStatement();
 		ResultSet rs = stat2.executeQuery("select ID_VARIABLE from VARIABLE V, PL_VAR, PLACA P where "
@@ -200,7 +200,7 @@ public class BaseDatos {
 		
 	}
 	
-	public boolean estadoVariable(String placa, String variable) throws SQLException{
+	public static boolean estadoVariable(String placa, String variable) throws SQLException{
 		
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select ESTADO from VARIABLE V, PL_VAR, PLACA P where "
@@ -214,7 +214,7 @@ public class BaseDatos {
 		
 	}
 	
-	public boolean estadoPlaca(String placa) throws SQLException{
+	public static boolean estadoPlaca(String placa) throws SQLException{
 		
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select ESTADO from PLACA P where ID='"+placa+"'");
@@ -227,7 +227,7 @@ public class BaseDatos {
 		
 	}
 	
-	public void cambiarUltimaAccion(String placa, String variable, String accion) throws SQLException{
+	public static void cambiarUltimaAccion(String placa, String variable, String accion) throws SQLException{
 		
 	}
 	
@@ -235,27 +235,27 @@ public class BaseDatos {
 		return null;
 	}
 	
-	public void anyadirUsuario(String nombre, String pass) throws SQLException{
+	public static void anyadirUsuario(String nombre, String pass) throws SQLException{
 		
 	}
 	
-	public void borrarUsuario(String nombre) throws SQLException{
+	public static void borrarUsuario(String nombre) throws SQLException{
 		
 	}
 	
-	public void cambiarNombreUsuario(String nombre, String pass) throws SQLException{
+	public static void cambiarNombreUsuario(String nombre, String pass) throws SQLException{
 		
 	}
 	
-	public void cambiarPassUsuario(String nombre, String pass) throws SQLException{
+	public static void cambiarPassUsuario(String nombre, String pass) throws SQLException{
 		
 	}
 	
-	public void anyadirAccionAVariable(String placa, String variable, String accion) throws SQLException{
+	public static void anyadirAccionAVariable(String placa, String variable, String accion) throws SQLException{
 		
 	}
 	
-	public void reiniciarVariable(String placa, String variable, String accion) throws SQLException{
+	public static void reiniciarVariable(String placa, String variable, String accion) throws SQLException{
 		
 	}
 	
