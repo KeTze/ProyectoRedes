@@ -11,6 +11,7 @@ final class HttpRequest implements Runnable {
   final static String CRLF = "\r\n";
   SocketManager sockManager;
   int estado;
+  String user = null;
 
   // Constructor
   public HttpRequest(SocketManager sockMan) {
@@ -32,8 +33,7 @@ final class HttpRequest implements Runnable {
    while (true){
 	 String requestLine = sockManager.Leer();
     System.out.println("RequestLine: " + requestLine);
-    sockManager.Escribir(requestLine+ '\n');
-    String user = null;
+    //sockManager.Escribir(requestLine+ '\n');
     String[] rl = requestLine.split(" ");
     String comando = rl[0];
     
@@ -41,14 +41,17 @@ final class HttpRequest implements Runnable {
 		case 0:
 	    	if (comando.equals("USER")) {
 	    		if(rl.length == 1){
-	    			System.out.println("400 ERR Falta el nombre de usuario.");
+	    			sockManager.Escribir("400 ERR Falta el nombre de usuario."+ '\n');
 	    		}else{
 	    			user = rl[1];
+	    			BaseDatos.connect();
 	    			if(BaseDatos.existeUsuario(user)){
-	    				System.out.println("200 OK Bienvenido "+user+".");
+	    				estado++;
+	    				sockManager.Escribir("200 OK Bienvenido "+user+"."+ '\n');
 	    			}else{
-	    				System.out.println("401 ERR Usuario desconocido.");
+	    				sockManager.Escribir("401 ERR Usuario desconocido."+ '\n');
 	    			}
+	    			BaseDatos.disconnect();
 	    		}
 	    	}else{
 	    	}
@@ -56,14 +59,16 @@ final class HttpRequest implements Runnable {
     	case 1:
     		if (comando.equals("PASS")) {
 	    		if(rl.length == 1){
-	    			System.out.println("402 ERR Falta la clave.");
+	    			sockManager.Escribir("402 ERR Falta la clave."+ '\n');
 	    		}else{
 	    			String pass = rl[1];
+	    			BaseDatos.connect();
 	    			if(BaseDatos.comprobarPass(user, pass)){
-	    				System.out.println("201 OK Bienvenido al sistema.");
+	    				sockManager.Escribir("201 OK Bienvenido al sistema."+ '\n');
 	    			}else{
-	    				System.out.println("403 ERR La clave es incorrecta.");
+	    				sockManager.Escribir("403 ERR La clave es incorrecta."+ '\n');
 	    			}
+	    			BaseDatos.disconnect();
 	    		}
 	    	}else{
 	    	}

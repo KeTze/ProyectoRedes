@@ -21,8 +21,13 @@ public class BaseDatos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public static void connect() throws ClassNotFoundException, SQLException {
-		Class.forName("org.sqlite.JDBC");
+	public static void connect() throws  SQLException {
+		try {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		//Aqui colocar la url donde este localizada la base de datos que vayamos a utilizar
 		conn = DriverManager.getConnection("jdbc:sqlite:redes.s3db");	
@@ -43,7 +48,7 @@ public class BaseDatos {
 			BaseDatos.connect();
 
 			BaseDatos.disconnect();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch ( SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -74,10 +79,11 @@ public class BaseDatos {
 	  Statement stat = conn.createStatement();
 	  ResultSet rs = stat.executeQuery("SELECT pass FROM USUARIO where nombre='"+n+"'");
 	  boolean enc=false;
-
+	  System.out.println("Antes del while   rs:"+rs);
 	   while(rs.next() && !enc)
 	   {
 		   String contraseña = rs.getString("pass");
+		   System.out.println("Base de Datos: "+contraseña);
 		   if(contraseña.equalsIgnoreCase(con))
 			   enc=true;
 	   }
