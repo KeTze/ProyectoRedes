@@ -79,11 +79,9 @@ public class BaseDatos {
 	  Statement stat = conn.createStatement();
 	  ResultSet rs = stat.executeQuery("SELECT pass FROM USUARIO where nombre='"+n+"'");
 	  boolean enc=false;
-	  System.out.println("Antes del while   rs:"+rs);
 	   while(rs.next() && !enc)
 	   {
 		   String contraseña = rs.getString("pass");
-		   System.out.println("Base de Datos: "+contraseña);
 		   if(contraseña.equalsIgnoreCase(con))
 			   enc=true;
 	   }
@@ -145,13 +143,39 @@ public class BaseDatos {
 		return aLObjetos; 
 	}
 
-	//A editar
 	public static ArrayList<String>buscarObjetos(String opcion, String patron) throws SQLException{
 		ArrayList<String>aLObjetos=new ArrayList<String>();
-		
+		patron.replace('*', '%');
+		patron.replace('?', '_');
 		Statement stat = conn.createStatement();
-		ResultSet rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
-				+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE)");
+		ResultSet rs = null;
+		if(opcion.equalsIgnoreCase("placa")){
+			rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+					+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE AND P.ID ILIKE '"+patron+"')");
+		}else if(opcion.equalsIgnoreCase("variable")){
+			rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+					+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE AND V.NOMBRE ILIKE '"+patron+"')");
+		}else if(opcion.equalsIgnoreCase("funcion principal")){
+			rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+					+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE AND V.FUNC_PRINC ILIKE '"+patron+"')");
+		}else if(opcion.equalsIgnoreCase("estado")){
+			if((patron.equalsIgnoreCase("O_"))||(patron.equalsIgnoreCase("%N"))||(patron.equalsIgnoreCase("_N")||(patron.equalsIgnoreCase("ON")))){
+				rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+						+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE AND PV.ESTADO=1");
+			}else if((patron.equalsIgnoreCase("O_F"))||(patron.equalsIgnoreCase("OF_"))||(patron.equalsIgnoreCase("_FF"))||(patron.equalsIgnoreCase("%F"))
+				||(patron.equalsIgnoreCase("%FF"))||(patron.equalsIgnoreCase("OF%"))||(patron.equalsIgnoreCase("OFF"))){
+				rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+						+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE AND PV.ESTADO=0");
+			}else if(patron.equalsIgnoreCase("O%")){
+				rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+						+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE)");
+			}
+			
+			
+		}else if(opcion.equalsIgnoreCase("ultima accion")){
+			rs = stat.executeQuery("select P.ID, V.NOMBRE, V.FUNCION_PRINC, PV.ESTADO, NOM_ACCION AS A.NOMBRE from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
+					+ "WHERE (P.ID=PV.ID_VARIABLE AND V.ID=PV.ID_PLACA AND A.ID=V.ID_ULTIMA_ACCION AND V.ID=AV.ID_VARIABLE AND NOM_ACCION ILIKE '"+patron+"')");
+		}		
 		int numElem = 0;
 		while (rs.next()) {	
 			String s = "ELEM "+numElem+" "+rs.getString("ID")+"; "+rs.getString("NOMBRE")+"; "+rs.getString("FUNCION_PRINC")+"; ";

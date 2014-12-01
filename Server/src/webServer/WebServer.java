@@ -19,7 +19,8 @@ public final class WebServer
 			//Socket conn = sock.accept();
 			
 			SocketManager sockManager = new SocketManager(wellcomeSocket.accept());
-
+			
+			System.out.println("Hola");
 			HttpRequest request = new HttpRequest(sockManager);
 
 			Thread thre = new Thread(request);

@@ -205,15 +205,19 @@ public class LoginWindow extends JFrame{
 									//Abrir ventana principal
 									JOptionPane.showMessageDialog( null, "Correcto!", "Error", JOptionPane.ERROR_MESSAGE );
 								}else if(resultado.substring(0, 3).equals("400")){
+									TCPClient.desconectar();
 									txtUsername.setBackground(Color.YELLOW);
 									JOptionPane.showMessageDialog( null, "Falta el nombre de usuario", "Error", JOptionPane.ERROR_MESSAGE );
 								}else if(resultado.substring(0, 3).equals("401")){
+									TCPClient.desconectar();
 									txtUsername.setBackground(Color.RED);
 									JOptionPane.showMessageDialog( null, "Usuario no registrado. Intentelo de nuevo", "Error", JOptionPane.ERROR_MESSAGE );
 								}else if(resultado.substring(0, 3).equals("402")){
+									TCPClient.desconectar();
 									passwordField.setBackground(Color.YELLOW);
 									JOptionPane.showMessageDialog( null, "Falta la clave de usuario", "Error", JOptionPane.ERROR_MESSAGE );
 								}else if(resultado.substring(0, 3).equals("403")){
+									TCPClient.desconectar();
 									passwordField.setBackground(Color.RED);
 									JOptionPane.showMessageDialog( null, "La clave de usuario que ha introducido es incorrecta", "Error", JOptionPane.ERROR_MESSAGE );
 								}

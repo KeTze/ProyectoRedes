@@ -28,11 +28,18 @@ public class TCPClient {
 		sm.CerrarSocket();
 	}
 	
+	/** Metodo que se encarga del inicio de sesion.
+	 * Primero comprueba el USER y a continuación si este es correcto el PASS
+	 * @param nombre Nombre de usuario
+	 * @param pass Contraseña
+	 * @return Devuelve el resultado de la operación
+	 * @throws IOException
+	 */
 	public static String iniciarSesion(String nombre, String pass) throws IOException{
 		sm.Escribir("USER "+nombre+'\n');
 		String s = sm.Leer();
 		System.out.println(s);
-		if(s.charAt(0)=='4'){
+		if(s.charAt(0)=='4'){	//Si ha habido error en el USER devuelve el error
 			return s;
 		}else{
 			sm.Escribir("PASS "+pass+'\n');
@@ -43,7 +50,68 @@ public class TCPClient {
 		
 	}
 	
+	/*Faltan:
+	 * LISTADO
+	 * BUSCAR
+	 * ON VARIABLE
+	 * OFF VARIABLE
+	 * ACCION 
+	 */
 	
+	/** Confirma una accion a realizar sobre la variable
+	 * @param parametro Parametro a enviar o null si no hay que enviar nada
+	 * @return true si ha sido correcta la confirmacion - false si faltan datos
+	 * @throws IOException
+	 */
+	public static boolean confirmarAccion(String parametro) throws IOException{
+		if(parametro==null){
+			sm.Escribir("CONFIRMAR_ACCION "+'\n');
+		}else{
+			sm.Escribir("CONFIRMAR_ACCION "+parametro+" "+'\n');
+		}
+		String s = sm.Leer();
+		System.out.println(s);
+		if(s.equals("206 OK Accion sobre el sensor confirmada")){
+			return true;
+		}else if(s.equals("409 ERR Faltan datos")){
+			return false;
+		}
+		return false;
+	}
+	
+	/**Rechaza la accion solicitada
+	 * @return true Si ha sido correcto - false Si no ha llegado confirmacion
+	 * @throws IOException
+	 */
+	public static boolean rechazarAccion() throws IOException{
+		sm.Escribir("RECHAZAR_ACCION "+'\n');
+		String s = sm.Leer();
+		System.out.println(s);
+		if(s.equals("207 OK Accion cancelada")){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	//FALTA OBTENER_FOTO************************************************************
+	
+	/**Cierra la conexion con el servidor
+	 * @return true Si ha sido correcto - false Si no ha llegado confirmacion
+	 * @throws IOException
+	 */
+	public static boolean salir() throws IOException{
+		sm.Escribir("SALIR "+'\n');
+		String s = sm.Leer();
+		System.out.println(s);
+		if(s.equals("208 OK Adios")){
+			return true;
+		}else{
+			return false;
+		}
+		
+		
+	}
 	
     public static void main(String[] args) throws Exception {
         String sentence=""; //Variable dnd se almacena la frase introducida por el usuario
