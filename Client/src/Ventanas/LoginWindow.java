@@ -37,7 +37,7 @@ public class LoginWindow extends JFrame{
 	private JPasswordField passwordField;
 	private JTextField txtUsername;
 	private JTextField txtServidor;
-
+	private static LoginWindow window;
 	/**
 	 * Launch the application.
 	 */
@@ -45,7 +45,7 @@ public class LoginWindow extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginWindow window = new LoginWindow();
+					window = new LoginWindow();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -202,8 +202,17 @@ public class LoginWindow extends JFrame{
 								String resultado = TCPClient.iniciarSesion(txtUsername.getText(), passwordField.getText());
 								System.out.println(resultado);
 								if(resultado.substring(0, 3).equals("201")){
-									//Abrir ventana principal
-									JOptionPane.showMessageDialog( null, "Correcto!", "Error", JOptionPane.ERROR_MESSAGE );
+									EventQueue.invokeLater(new Runnable() {
+										public void run() {
+											try {
+												VentanaBuscar window1 = new VentanaBuscar();
+												window1.setVisible(true);
+											} catch (Exception e) {
+												e.printStackTrace();
+											}
+										}
+									});
+									window.setVisible(false);
 								}else if(resultado.substring(0, 3).equals("400")){
 									TCPClient.desconectar();
 									txtUsername.setBackground(Color.YELLOW);
