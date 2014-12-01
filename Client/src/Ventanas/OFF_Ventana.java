@@ -42,7 +42,7 @@ public class OFF_Ventana extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginWindow window = new LoginWindow();
+					OFF_Ventana window = new OFF_Ventana();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -61,12 +61,12 @@ public class VentanaListado extends JFrame implements FocusListener {
 	private Usuario usuarioActual;
 	private JPanel panelCentral;
 	private JPanel panelBusqueda;
-	private JButton btnVolver;
+	private JButton btnSalir;
 	private JTable table_1 ;
-	private JButton btnRegalar;
-	private JButton btnComprar;
+	private JButton btnActivarDesactivar;
+	private JButton btnObtenerFoto;
 	private int filaS=0;
-	private JButton btnAlquilar;
+	private JButton btnEjecutarAccion;
 
 	/**
 	 * Main de prueba
@@ -148,7 +148,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 		txtBusqueda.setColumns(50);
 
 		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Tipo de Busqueda", "Por ISBN", "Por titulo", "Por autor","Por Genero","Precio menor que"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Tipo de Busqueda", "Por placa", "Por variable", "Por funcion principal", "Por estado", "Por ultima accion"}));
 		comboBox.setToolTipText("");
 		panelBusqueda.add(comboBox);
 
@@ -162,8 +162,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panelBusqueda.add(btnBuscar, BorderLayout.EAST);
 
 
-		btnVolver = new JButton("VOLVER");
-		btnVolver.addActionListener(new ActionListener() {
+		btnSalir = new JButton("SALIR");
+		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
@@ -197,7 +197,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 			}
 		});
 
-		contentPane_1.add(btnVolver,BorderLayout.SOUTH);
+		contentPane_1.add(btnSalir,BorderLayout.SOUTH);
 
 		panelCentral = new JPanel();
 		contentPane_1.add(panelCentral, BorderLayout.CENTER);
@@ -212,7 +212,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 		JPanel panelLabel = new JPanel();
 		panelCentral.add(panelLabel, BorderLayout.NORTH);
 
-		JLabel lblSeleccion = new JLabel("Seleccione un libro y pulse la opci\u00F3n deseada");
+		JLabel lblSeleccion = new JLabel("Seleccione un componente y pulse la opci\u00F3n deseada");
 		lblSeleccion.setToolTipText("");
 		panelLabel.add(lblSeleccion);
 
@@ -224,10 +224,10 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panelBotones.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 
-		btnComprar = new JButton("Comprar");
-		btnComprar.setEnabled(false);
-		panel.add(btnComprar);
-		btnComprar.addActionListener(new ActionListener() {
+		btnObtenerFoto = new JButton("Obtener Foto");
+		btnObtenerFoto.setEnabled(false);
+		panel.add(btnObtenerFoto);
+		btnObtenerFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				int seleccion = JOptionPane.showOptionDialog(null, "¿Desea comprar el libro "+libro.get(filaS).getTitulo()+"?", "Compra", 
@@ -258,10 +258,10 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panelBotones.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 
-		btnRegalar = new JButton("Regalar");
-		btnRegalar.setEnabled(false);
-		panel_1.add(btnRegalar);
-		btnRegalar.addActionListener(new ActionListener() {
+		btnActivarDesactivar = new JButton("Activar/Desactivar");
+		btnActivarDesactivar.setEnabled(false);
+		panel_1.add(btnActivarDesactivar);
+		btnActivarDesactivar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VentanaRegalar v=new VentanaRegalar(usuarioActual,libro.get(filaS),filaS);
 				v.setVisible(true);
@@ -272,10 +272,10 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panelBotones.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 
-		btnAlquilar = new JButton("Alquiler");
-		btnAlquilar.setEnabled(false);
-		panel_2.add(btnAlquilar);
-		btnAlquilar.addActionListener(new ActionListener() {
+		btnEjecutarAccion = new JButton("Ejecutar Accion");
+		btnEjecutarAccion.setEnabled(false);
+		panel_2.add(btnEjecutarAccion);
+		btnEjecutarAccion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int seleccion = JOptionPane.showOptionDialog(null, "¿Desea Alquilar el libro "+libro.get(filaS).getTitulo()+"?", "Alquilar", 
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Si", "No" }, "Si");
@@ -606,9 +606,9 @@ public class VentanaListado extends JFrame implements FocusListener {
 	@Override
 	public void focusGained(FocusEvent arg0) {
 		filaS= table_1.getSelectedRow();
-		btnComprar.setEnabled(true);;
-		btnRegalar.setEnabled(true);;
-		btnAlquilar.setEnabled(true);;
+		btnObtenerFoto.setEnabled(true);;
+		btnActivarDesactivar.setEnabled(true);;
+		btnEjecutarAccion.setEnabled(true);;
 	}
 
 	/**
