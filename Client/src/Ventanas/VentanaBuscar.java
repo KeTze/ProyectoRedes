@@ -31,9 +31,10 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class VentanaBuscar extends JFrame{
-	private JTextField textField;
+	private JTextField txtaAbc;
 
 	/**
 	 * Launch the application.
@@ -63,12 +64,12 @@ public class VentanaBuscar extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setBounds(100, 100, 390, 238);
+		setBounds(100, 100, 400, 240);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
 		setResizable(false);
-		setTitle("Control de Invernadero");
+		setTitle("Control de Invernadero: Buscar Variables Control");
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -87,7 +88,8 @@ public class VentanaBuscar extends JFrame{
 		}
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(100, 46, 233, 30);
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Elegir opci\u00F3n", "Por placa", "Por variable", "Por funci\u00F3n principal", "Por estado", "Por \u00FAltima acci\u00F3n"}));
+		comboBox.setBounds(100, 46, 245, 30);
 		
 		JLabel lblOpcion = new JLabel("Opci\u00F3n:");
 		lblOpcion.setBounds(10, 54, 86, 14);
@@ -97,9 +99,11 @@ public class VentanaBuscar extends JFrame{
 		lblPatron.setBounds(10, 101, 36, 14);
 		lblPatron.setForeground(Color.WHITE);
 		
-		textField = new JTextField();
-		textField.setBounds(100, 94, 233, 28);
-		textField.setColumns(10);
+		txtaAbc = new JTextField();
+		txtaAbc.setText("(a*, abc?)");
+		txtaAbc.setToolTipText("");
+		txtaAbc.setBounds(100, 94, 245, 28);
+		txtaAbc.setColumns(10);
 		
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.setBounds(34, 167, 81, 23);
@@ -112,7 +116,7 @@ public class VentanaBuscar extends JFrame{
 		getContentPane().setLayout(null);
 		getContentPane().add(lblPatron);
 		getContentPane().add(lblOpcion);
-		getContentPane().add(textField);
+		getContentPane().add(txtaAbc);
 		getContentPane().add(comboBox);
 		getContentPane().add(btnBuscar);
 		getContentPane().add(btnBorrar);
