@@ -71,7 +71,7 @@ public class LoginWindow extends JFrame{
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
 		setResizable(false);
-		setTitle("Control de Invernadero");
+		setTitle("Control de Invernadero: Login");
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
