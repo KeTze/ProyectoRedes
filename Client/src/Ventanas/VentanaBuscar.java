@@ -32,7 +32,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 
-public class OFF_Ventana extends JFrame{
+public class VentanaBuscar extends JFrame{
 	private JTextField textField;
 
 	/**
@@ -42,7 +42,7 @@ public class OFF_Ventana extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginWindow window = new LoginWindow();
+					VentanaBuscar window = new VentanaBuscar();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,7 +54,7 @@ public class OFF_Ventana extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public OFF_Ventana() {
+	public VentanaBuscar() {
 		super();
 		initialize();
 	}
@@ -63,7 +63,7 @@ public class OFF_Ventana extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setBounds(100, 100, 338, 238);
+		setBounds(100, 100, 390, 238);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
@@ -87,47 +87,36 @@ public class OFF_Ventana extends JFrame{
 		}
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(100, 46, 233, 30);
 		
-		JLabel lblPlaca = new JLabel("Placa:");
-		lblPlaca.setForeground(Color.WHITE);
+		JLabel lblOpcion = new JLabel("Opci\u00F3n:");
+		lblOpcion.setBounds(10, 54, 86, 14);
+		lblOpcion.setForeground(Color.WHITE);
 		
-		JLabel lblVariable = new JLabel("Variable:");
-		lblVariable.setForeground(Color.WHITE);
+		JLabel lblPatron = new JLabel("Patr\u00F3n:");
+		lblPatron.setBounds(10, 101, 36, 14);
+		lblPatron.setForeground(Color.WHITE);
 		
 		textField = new JTextField();
+		textField.setBounds(100, 94, 233, 28);
 		textField.setColumns(10);
-		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblVariable)
-							.addGap(29))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblPlaca, GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(textField)
-						.addComponent(comboBox, 0, 233, Short.MAX_VALUE))
-					.addContainerGap(14, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(46)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblPlaca))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblVariable)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(88, Short.MAX_VALUE))
-		);
-		getContentPane().setLayout(groupLayout);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(34, 167, 81, 23);
+		
+		JButton btnBorrar = new JButton("Borrar");
+		btnBorrar.setBounds(130, 167, 81, 23);
+		
+		JButton btnMostrarTodo = new JButton("Mostrar todo");
+		btnMostrarTodo.setBounds(243, 167, 116, 23);
+		getContentPane().setLayout(null);
+		getContentPane().add(lblPatron);
+		getContentPane().add(lblOpcion);
+		getContentPane().add(textField);
+		getContentPane().add(comboBox);
+		getContentPane().add(btnBuscar);
+		getContentPane().add(btnBorrar);
+		getContentPane().add(btnMostrarTodo);
 		
 		setLocationRelativeTo(null);
 		
