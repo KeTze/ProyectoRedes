@@ -192,6 +192,8 @@ public class LoginWindow extends JFrame{
 				passwordField.setBackground(Color.WHITE);
 				if(txtServidor.getText().equals("")){
 					txtServidor.setBackground(Color.YELLOW);
+					btnLogin.setEnabled(true);
+					btnLogin.setText("Iniciar Sesión");
 				}else{
 					
 					Thread t = new Thread(new Runnable(){
@@ -217,22 +219,32 @@ public class LoginWindow extends JFrame{
 									TCPClient.desconectar();
 									txtUsername.setBackground(Color.YELLOW);
 									JOptionPane.showMessageDialog( null, "Falta el nombre de usuario", "Error", JOptionPane.ERROR_MESSAGE );
+									btnLogin.setEnabled(true);
+									btnLogin.setText("Iniciar Sesión");
 								}else if(resultado.substring(0, 3).equals("401")){
 									TCPClient.desconectar();
 									txtUsername.setBackground(Color.RED);
 									JOptionPane.showMessageDialog( null, "Usuario no registrado. Intentelo de nuevo", "Error", JOptionPane.ERROR_MESSAGE );
+									btnLogin.setEnabled(true);
+									btnLogin.setText("Iniciar Sesión");
 								}else if(resultado.substring(0, 3).equals("402")){
 									TCPClient.desconectar();
 									passwordField.setBackground(Color.YELLOW);
 									JOptionPane.showMessageDialog( null, "Falta la clave de usuario", "Error", JOptionPane.ERROR_MESSAGE );
+									btnLogin.setEnabled(true);
+									btnLogin.setText("Iniciar Sesión");
 								}else if(resultado.substring(0, 3).equals("403")){
 									TCPClient.desconectar();
 									passwordField.setBackground(Color.RED);
 									JOptionPane.showMessageDialog( null, "La clave de usuario que ha introducido es incorrecta", "Error", JOptionPane.ERROR_MESSAGE );
+									btnLogin.setEnabled(true);
+									btnLogin.setText("Iniciar Sesión");
 								}
 							} catch (IOException e) {
 								txtServidor.setBackground(Color.RED);
 								JOptionPane.showMessageDialog( null, "La IP del Servidor que ha introducido es incorrecta o el servidor no se encuentra disponible", "Error", JOptionPane.ERROR_MESSAGE );
+								btnLogin.setEnabled(true);
+								btnLogin.setText("Iniciar Sesión");
 							}
 						}
 					});
@@ -240,8 +252,7 @@ public class LoginWindow extends JFrame{
 					
 				}
 				
-				btnLogin.setEnabled(true);
-				btnLogin.setText("Iniciar Sesión");
+				
 			}
 		});
 		

@@ -204,6 +204,26 @@ public class BaseDatos {
 		return aLObjetos; 
 	}
 	
+	public static ArrayList<String> obtenerListaAcciones(String Variable) throws SQLException{
+		ArrayList<String>aLAcciones=new ArrayList<String>();
+		
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select A.ID_ACCION from ACCION A, AC_VAR AV "
+				+ "WHERE (A.ID_ACCION=AV.ID_ACCION)");
+		
+		while (rs.next()) {	
+			String s = rs.getString("ID_ACCION");;
+			
+			//System.out.println(s);
+			aLAcciones.add(s);
+		}
+		
+		rs.close();
+		stat.close();
+			
+		return aLAcciones; 
+	}
+	
 	//Mirar nombres columnas tablas
 	public static void encenderVariable(String placa, String variable) throws SQLException{
 		
@@ -243,14 +263,14 @@ public class BaseDatos {
 	public static boolean estadoVariable(String placa, String variable) throws SQLException{
 		
 		Statement stat = conn.createStatement();
-		ResultSet rs = stat.executeQuery("select ESTADO from VARIABLE V, PL_VAR, PLACA P where "
-				+ "V.ID=PL.ID_VARIABLE AND PL.ID_PLACA=P.ID AND NOMBRE='"+variable+"' AND P.ID='"+placa+"'");
+		ResultSet rs = stat.executeQuery("select ESTADO from VARIABLE V, PL_VAR PV, PLACA P where "
+				+ "V.ID_VARIABLE=PV.ID_VARIABLE AND PV.ID_PLACA=P.ID AND V.ID_VARIABLE='"+variable+"' AND P.ID='"+placa+"'");
 		boolean estado = false;
 		
 		if(rs.next()){
 			estado = rs.getBoolean("ESTADO");
 		}else{
-			throw new SQLException("Not Found");
+			throw new SQLException("Variable Not Found");
 		}
 		
 		
@@ -264,9 +284,12 @@ public class BaseDatos {
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select ESTADO from PLACA P where ID='"+placa+"'");
 		boolean estado = false;
-		while(rs.next()){
+		if(rs.next()){
 			estado = rs.getBoolean("ESTADO");
+		}else{
+			throw new SQLException("Placa Not Found");
 		}
+		
 		stat.close();
 		return estado;
 		

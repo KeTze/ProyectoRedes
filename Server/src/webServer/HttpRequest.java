@@ -128,6 +128,30 @@ final class HttpRequest implements Runnable {
     			}
 				
 			}else if (comando.equals("ACCION")){
+				String id_placa = rl[1];
+        		String id_variable = rl[2];
+        		String accion = rl[3];
+        		BaseDatos.connect();
+        		try{
+        			if(BaseDatos.estadoPlaca(id_placa)){
+            			if(BaseDatos.estadoVariable(id_placa, id_variable)){
+            				//BaseDatos.cambiarUltimaAccion(id_placa, id_variable, accion);
+            				sockManager.Escribir("205 OK Esperando confirmacion"+ CRLF);
+            				estado++;
+            			}else{
+            				sockManager.Escribir("406 ERROR id_variable en estado OFF"+ CRLF);
+            			}
+            		}else{
+            			sockManager.Escribir("406 ERROR id_variable en estado OFF"+ CRLF);
+            		}
+        		}catch(SQLException e){
+        			if(e.getMessage().equals("Variable Not Found")){
+        				sockManager.Escribir("405 ERROR id_variable no existe"+ CRLF);
+        			}else if(e.getMessage().equals("Placa Not Found")){
+        				sockManager.Escribir("405 ERROR id_placa no existe"+ CRLF);
+        			}
+        		}
+        		BaseDatos.disconnect();
         		
 			}else if (comando.equals("OBTENER_FOTO")){
 				String id_placa = rl[1];
@@ -155,6 +179,7 @@ final class HttpRequest implements Runnable {
 				
 			}else if (comando.equals("RECHAZAR_ACCION")){
         		System.out.println("207 OK Acción cancelada"+ CRLF);
+        		estado--;
 			}
 		break;
     }
