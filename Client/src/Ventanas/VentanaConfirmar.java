@@ -34,6 +34,8 @@ import java.util.ArrayList;
 public class VentanaConfirmar extends JFrame{
 	private static VentanaConfirmar window;
 	private JTextField textField;
+	JButton btnConfirmar;
+	JButton btnRechazar;
 	/**
 	 * Launch the application.
 	 */
@@ -67,9 +69,8 @@ public class VentanaConfirmar extends JFrame{
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
 		
-		JButton btnConfirmar = new JButton("Confirmar");
-		
-		JButton btnRechazar = new JButton("Rechazar");
+		btnConfirmar = new JButton("Confirmar");
+		btnRechazar = new JButton("Rechazar");
 		
 		textField = new JTextField();
 		textField.setColumns(10);
@@ -139,12 +140,71 @@ public class VentanaConfirmar extends JFrame{
 		
 		eventos();
 	}
-	private void desactivarBotones(){
-		
-	}
+
 	private void eventos() {
+		btnConfirmar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				btnConfirmar.setEnabled(false);
+				btnRechazar.setEnabled(false);
+				Thread t = new Thread(new Runnable(){
+					public void run() {
+						try {
+							boolean correcto = TCPClient.confirmarAccion(textField.getText());
+							if (correcto)
+							{
+								EventQueue.invokeLater(new Runnable() {
+									public void run() {
+										try {
+											VentanaBuscar window1 = new VentanaBuscar();
+											window1.setVisible(true);
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}else{
+								textField.setBackground(Color.YELLOW);
+								JOptionPane.showMessageDialog( null, "Faltan los datos", "Error", JOptionPane.ERROR_MESSAGE );
+								btnConfirmar.setEnabled(true);
+								btnRechazar.setEnabled(true);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				t.start();
+			}
+		});
 		
-	
+		btnRechazar.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				btnConfirmar.setEnabled(false);
+				btnRechazar.setEnabled(false);
+				Thread t = new Thread(new Runnable(){
+					public void run() {
+						try {
+							TCPClient.rechazarAccion();
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									try {
+										VentanaBuscar window1 = new VentanaBuscar();
+										window1.setVisible(true);
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							dispose();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				t.start();
+			}
+		});
 	}
 	
 	private JFrame getFrame(){
