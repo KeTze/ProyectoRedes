@@ -94,7 +94,9 @@ final class HttpRequest implements Runnable {
         		
         	}else if (comando.equals("BUSCAR")){
         		if(rl.length>1){
+        			BaseDatos.connect();
         			ArrayList<String> listado = BaseDatos.buscarObjetos(rl[1], rl[2]);
+        			BaseDatos.disconnect();
             		for(int i = 0; i < listado.size();i++)
             		{
             			sockManager.Escribir(listado.get(i)+'\n');

@@ -195,15 +195,19 @@ public class TCPClient {
             SocketManager sm = new SocketManager("127.0.0.1", 3000);
             sm.Escribir("USER user"+'\n');
             sm.Escribir("PASS pass"+'\n');
-            sm.Escribir("LISTADO"+'\n');
+            sm.Escribir("BUSCAR variable temperatu*"+'\n');
+            //sm.Escribir("LISTADO"+'\n');
            // ArrayList <Variable> aV = new ArrayList<>();
     		
     		String linea = sm.Leer();
+    		System.out.println(linea);
     		while(!linea.equals("202 FINLISTA")){
     			if(linea!="\n"){
-    				System.out.println(linea);
+    				
     			}
+    			
     			linea = sm.Leer();
+    			System.out.println(linea);
     		}
             
             
