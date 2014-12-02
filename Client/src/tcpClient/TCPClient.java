@@ -1,7 +1,7 @@
 package tcpClient;
 import util.*;
 
-import java.net.*;
+import java.util.ArrayList;
 import java.io.*;
 
 /**
@@ -32,7 +32,7 @@ public class TCPClient {
 	 * Primero comprueba el USER y a continuación si este es correcto el PASS
 	 * @param nombre Nombre de usuario
 	 * @param pass Contraseña
-	 * @return Devuelve el resultado de la operación
+	 * @return Devuelve el resultado de la operación (Error de USER o Resultado de PASS)
 	 * @throws IOException
 	 */
 	public static String iniciarSesion(String nombre, String pass) throws IOException{
@@ -49,10 +49,84 @@ public class TCPClient {
 		}
 		
 	}
+	/** Devuelve una lista con todos los objetos de la BBDD del servidor
+	 * @return Lista de variables
+	 * @throws IOException 
+	 */
+	public static ArrayList<Variable> obtenerListado() throws IOException{
+		ArrayList <Variable> aV = new ArrayList<>();
+		sm.Escribir("LISTADO"+'\n');
+		
+		String linea = sm.Leer();
+		while(!linea.equals("202 FINLISTA")){
+			if(linea!="\n"){
+				Variable v = new Variable();
+				String[] respuesta = linea.split(";");
+				if(respuesta.length==5){
+					
+					String [] primerHueco = respuesta[0].split(" ");
+					String s = "";
+					//Buscamos todo lo q haya desde ELEM ** hasta ;
+					for(int i=2; i<primerHueco.length;i++){
+						s = s + primerHueco[i];
+					}
+					v.setPlaca(s);
+					v.setNombre(respuesta[1]);
+					v.setFuncPrincipal(respuesta[2]);			
+					v.setEstado(respuesta[3]);
+					v.setUltimaAccion(respuesta[4]);
+					aV.add(v);
+				}
+
+			}
+			linea = sm.Leer();
+		}
+		
+		
+		return aV;
+	}
+	
+	/**Devuelve una lista con todos los objetos de la BBDD del servidor
+	 * que se corresponden con la opcion y el patrón 
+	 * @param opcion 
+	 * @param patron
+	 * @return Lista de variables
+	 * @throws IOException
+	 */
+	public static ArrayList<Variable> obtenerBusqueda(String opcion, String patron) throws IOException{
+		ArrayList <Variable> aV = new ArrayList<>();
+		sm.Escribir("BUSCAR "+opcion+" "+patron+'\n');
+		
+		String linea = sm.Leer();
+		while(!linea.equals("202 FINLISTA")){
+			if(linea!="\n"){
+				Variable v = new Variable();
+				String[] respuesta = linea.split(";");
+				if(respuesta.length==5){
+					
+					String [] primerHueco = respuesta[0].split(" ");
+					String s = "";
+					//Buscamos todo lo q haya desde ELEM ** hasta ;
+					for(int i=2; i<primerHueco.length;i++){
+						s = s + primerHueco[i];
+					}
+					v.setPlaca(s);
+					v.setNombre(respuesta[1]);
+					v.setFuncPrincipal(respuesta[2]);			
+					v.setEstado(respuesta[3]);
+					v.setUltimaAccion(respuesta[4]);
+					aV.add(v);
+				}
+
+			}
+			linea = sm.Leer();
+		}
+		
+		
+		return aV;
+	}
 	
 	/*Faltan:
-	 * LISTADO
-	 * BUSCAR
 	 * ON VARIABLE
 	 * OFF VARIABLE
 	 * ACCION 
@@ -113,31 +187,30 @@ public class TCPClient {
 		
 	}
 	
+	
+	//BANCO DE PRUEBAS
     public static void main(String[] args) throws Exception {
-        String sentence=""; //Variable dnd se almacena la frase introducida por el usuario
-        String modifiedSentence=""; //Variable dnd se recibe la frase capitalizada
-        try {
+       try {
             //Se crea el socket, pasando el nombre del servidor y el puerto de conexión
             SocketManager sm = new SocketManager("127.0.0.1", 3000);
-            //Se inicializan los streams de lectura y escritura del socket
-
-            //Se declara un buffer de lectura del
-            //dato escrito por el usuario por teclado
-            //es necesario pq no es un buffer propio de los sockets
-            BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-            //Se almacena en "sentence" la linea introducida por teclado
-
-            while (!sentence.equals("adios")) {
-                System.out.print("String a enviar: ");
-                sentence = inFromUser.readLine();
-                //El método Escribir, pone en el socket lo introducido por teclado
-                sm.Escribir(sentence + '\n');
-                //El método Leer, lee del socket lo enviado por el Servidor
-                modifiedSentence = sm.Leer();
-                //Saca por consola la frase modificada enviada por el servidor
-                System.out.println("Desde el servidor: " + modifiedSentence);
-            }
-            System.out.println("Fin de la práctica");
+            sm.Escribir("USER user"+'\n');
+            sm.Escribir("PASS pass"+'\n');
+            sm.Escribir("LISTADO"+'\n');
+           // ArrayList <Variable> aV = new ArrayList<>();
+    		
+    		String linea = sm.Leer();
+    		while(!linea.equals("202 FINLISTA")){
+    			if(linea!="\n"){
+    				System.out.println(linea);
+    			}
+    			linea = sm.Leer();
+    		}
+            
+            
+            
+            
+            
+            System.out.println("Fin de la prueba");
             sm.CerrarSocket();
         } catch (Exception e) {
 			System.err.println("main: " + e);

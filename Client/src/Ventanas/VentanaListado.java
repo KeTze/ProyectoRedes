@@ -31,11 +31,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import Clases.*;
 
 import javax.swing.BoxLayout;
 
-import net.miginfocom.swing.MigLayout;
+import tcpClient.Variable;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -54,11 +53,10 @@ public class VentanaListado extends JFrame implements FocusListener {
 	private MiModelo dtm;
 	private JButton btnBuscar;
 	private JComboBox comboBox;
-	private ArrayList<Libro> libro= new ArrayList();
+	private ArrayList<Variable> lVariable= new ArrayList();
 	private JScrollPane scrollPane;
 	private JPanel contentPane;
 	private JPanel contentPane_1;
-	private Usuario usuarioActual;
 	private JPanel panelCentral;
 	private JPanel panelBusqueda;
 	private JButton btnSalir;
@@ -72,14 +70,12 @@ public class VentanaListado extends JFrame implements FocusListener {
 	 * Main de prueba
 	 */
 	public static void main(String[] args) {
-		final Usuario u1=new Usuario();
-		u1.setSaldo(1000);
-		u1.setDni("7777");
+		
 		EventQueue.invokeLater(new Runnable() {
 
 			public void run() {
 				try {
-					VentanaListado frame = new VentanaListado(u1);
+					VentanaListado frame = new VentanaListado();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -92,8 +88,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 	 * Crea la ventana tienda
 	 * @param usuario que utiliza el programa
 	 */
-	public VentanaListado(Usuario u) {
-		usuarioActual = u;
+	public VentanaListado() {
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 862, 542);
 		contentPane_1 = new JPanel();
@@ -101,42 +97,19 @@ public class VentanaListado extends JFrame implements FocusListener {
 		setContentPane(contentPane_1);
 		contentPane_1.setLayout(new BorderLayout(0, 0));
 
-		ArrayList<Libro> alquiler = new ArrayList();
-		ArrayList<Libro> compra = new ArrayList();
 		
-		try {
-
-			alquiler = BaseDatos.obtenerLibrosAlquilados(usuarioActual);
-			compra = BaseDatos.obtenerLibrosComprados(usuarioActual);
-			libro = BaseDatos.obtenerLibros();
-		} catch (SQLException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		//Obtener variables**************************************
+		
+		
+		
 		panelBusqueda = new JPanel();
 		dtm = new MiModelo();
-		boolean eliminado = false;
-		for(int i=0;i<libro.size();i++){
-			for(int j=0;j<compra.size(); j++){
-				if(compra.get(j).getISBN().equals(libro.get(i).getISBN())){
-					libro.remove(i);
-					eliminado = true;
-				}
-			}
-			if(!eliminado){
-				for(int j=0;j<alquiler.size(); j++){
-					if(alquiler.get(j).getISBN().equals(libro.get(i).getISBN())){
-						libro.remove(i);
-					}
-				}
-			}
-		}
-		dtm.setColumnIdentifiers(new String [] {"ISBN","TITULO","AUTOR", "GENERO","COMPRA","ALQUILAR"});
+		
+		dtm.setColumnIdentifiers(new String [] {"PLACA","VARIABLE","FUNCION PRINC", "ESTADO","ULTIMA ACCION"});
 
-		for(int i = 0; i<libro.size(); i++){
-			Libro l = libro.get(i);
-			dtm.addRow(new String []{l.getISBN(),l.getTitulo(), l.getAut(), l.getGenero(),""+l.getPrecio_venta(),""+l.getPrecio_alquiler()});
+		for(int i = 0; i<lVariable.size(); i++){
+			Variable v = lVariable.get(i);
+			dtm.addRow(new String []{v.getPlaca(),v.getNombre(), v.getFuncPrincipal(), v.getEstado(),v.getUltimaAccion()});
 
 		}
 
@@ -230,7 +203,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 		btnObtenerFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				int seleccion = JOptionPane.showOptionDialog(null, "¿Desea comprar el libro "+libro.get(filaS).getTitulo()+"?", "Compra", 
+				int seleccion = JOptionPane.showOptionDialog(null, "¿Desea comprar el libro "+lVariable.get(filaS).getTitulo()+"?", "Compra", 
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Si", "No" }, "Si");
 
 				if(seleccion==0){
@@ -263,7 +236,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panel_1.add(btnActivarDesactivar);
 		btnActivarDesactivar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VentanaRegalar v=new VentanaRegalar(usuarioActual,libro.get(filaS),filaS);
+				VentanaRegalar v=new VentanaRegalar(usuarioActual,lVariable.get(filaS),filaS);
 				v.setVisible(true);
 			}
 		});
@@ -277,7 +250,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panel_2.add(btnEjecutarAccion);
 		btnEjecutarAccion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int seleccion = JOptionPane.showOptionDialog(null, "¿Desea Alquilar el libro "+libro.get(filaS).getTitulo()+"?", "Alquilar", 
+				int seleccion = JOptionPane.showOptionDialog(null, "¿Desea Alquilar el libro "+lVariable.get(filaS).getTitulo()+"?", "Alquilar", 
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Si", "No" }, "Si");
 				if(seleccion==0){
 
@@ -532,8 +505,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		table.setModel(dtm); 
 		if(comboBox.getSelectedItem().equals("Por autor")){
 
-			for(int i=0; i<libro.size(); i++){
-				l = libro.get(i);
+			for(int i=0; i<lVariable.size(); i++){
+				l = lVariable.get(i);
 				if(txtBusqueda.getText().equals(l.getAut()) || txtBusqueda.getText().equals(l.getAut()) || txtBusqueda.getText().equals(l.getAut()+" "+l.getAut())){
 					dtm.addRow(new String []{l.getISBN(),l.getTitulo(), l.getAut(), l.getGenero(),""+l.getPrecio_venta(),""+l.getPrecio_alquiler()});
 				}
@@ -544,8 +517,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		}
 
 		if(comboBox.getSelectedItem().equals("Por ISBN")){
-			for(int i=0; i<libro.size(); i++){
-				l = libro.get(i);
+			for(int i=0; i<lVariable.size(); i++){
+				l = lVariable.get(i);
 				if(txtBusqueda.getText().equals(l.getISBN())){
 					dtm.addRow(new String []{l.getISBN(),l.getTitulo(), l.getAut(), l.getGenero(),""+l.getPrecio_venta(),""+l.getPrecio_alquiler()});		
 				}
@@ -555,8 +528,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		}
 
 		if(comboBox.getSelectedItem().equals("Por titulo")){
-			for(int i=0; i<libro.size(); i++){
-				l = libro.get(i);
+			for(int i=0; i<lVariable.size(); i++){
+				l = lVariable.get(i);
 				if(txtBusqueda.getText().equals(l.getTitulo())){
 					dtm.addRow(new String []{l.getISBN(),l.getTitulo(), l.getAut(), l.getGenero(),""+l.getPrecio_venta(),""+l.getPrecio_alquiler()});
 				}
@@ -566,8 +539,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		}
 
 		if(comboBox.getSelectedItem().equals("Tipo de Busqueda")){
-			for(int i=0; i<libro.size(); i++){
-				l = libro.get(i);
+			for(int i=0; i<lVariable.size(); i++){
+				l = lVariable.get(i);
 
 				dtm.addRow(new String []{l.getISBN(),l.getTitulo(), l.getAut(), l.getGenero(),""+l.getPrecio_venta(),""+l.getPrecio_alquiler()});
 
@@ -576,8 +549,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		}
 
 		if(comboBox.getSelectedItem().equals("Por Genero")){
-			for(int i=0; i<libro.size(); i++){
-				l = libro.get(i);
+			for(int i=0; i<lVariable.size(); i++){
+				l = lVariable.get(i);
 				if(txtBusqueda.getText().equals(l.getGenero())){
 					dtm.addRow(new String []{l.getISBN(),l.getTitulo(), l.getAut(), l.getGenero(),""+l.getPrecio_venta(),""+l.getPrecio_alquiler()});
 
@@ -588,8 +561,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		}
 
 		if(comboBox.getSelectedItem().equals("Precio menor que")){
-			for(int i=0; i<libro.size(); i++){
-				l = libro.get(i);
+			for(int i=0; i<lVariable.size(); i++){
+				l = lVariable.get(i);
 				if(Integer.parseInt(txtBusqueda.getText())>=(l.getPrecio_venta())){
 					dtm.addRow(new String []{l.getISBN(),l.getTitulo(), l.getAut(), l.getGenero(),""+l.getPrecio_venta(),""+l.getPrecio_alquiler()});
 

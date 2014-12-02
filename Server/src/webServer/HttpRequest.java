@@ -2,7 +2,9 @@ package webServer;
 
 import java.io.*;
 import java.net.*;
+import java.sql.SQLException;
 import java.util.*;
+
 import util.BaseDatos;
 import util.SocketManager;
 
@@ -28,9 +30,10 @@ final class HttpRequest implements Runnable {
     }
   }
 
-  private void processRequest() throws Exception {
+  private void processRequest() throws Exception{
     // Get the request line of the HTTP request message.
-   while (true){
+	  boolean proceso = true;
+   while (proceso){
 	 String requestLine = sockManager.Leer();
     System.out.println("RequestLine: " + requestLine);
     //sockManager.Escribir(requestLine+ '\n');
@@ -64,6 +67,7 @@ final class HttpRequest implements Runnable {
 	    			String pass = rl[1];
 	    			BaseDatos.connect();
 	    			if(BaseDatos.comprobarPass(user, pass)){
+	    				estado++;
 	    				sockManager.Escribir("201 OK Bienvenido al sistema"+ CRLF);
 	    			}else{
 	    				sockManager.Escribir("403 ERR La clave es incorrecta"+ CRLF);
@@ -76,22 +80,28 @@ final class HttpRequest implements Runnable {
         break;
     	case 2:
         	if (comando.equals("LISTADO")) {
+        		BaseDatos.connect();
         		ArrayList<String> listado = BaseDatos.listaObjetos();
+        		BaseDatos.disconnect();
         		for(int i = 0; i < listado.size();i++)
         		{
-        			System.out.println(listado.get(i));
+        			sockManager.Escribir(listado.get(i)+'\n');
         		}
-        		System.out.println("\n");
-        		System.out.println("202 FINLISTA"+ CRLF);
+        		sockManager.Escribir("\n");
+        		sockManager.Escribir("202 FINLISTA"+ CRLF);
+        		
+        		
         		
         	}else if (comando.equals("BUSCAR")){
-        		ArrayList<String> listado = BaseDatos.buscarObjetos(rl[1], rl[2]);
-        		for(int i = 0; i < listado.size();i++)
-        		{
-        			System.out.println(listado.get(i));
+        		if(rl.length>1){
+        			ArrayList<String> listado = BaseDatos.buscarObjetos(rl[1], rl[2]);
+            		for(int i = 0; i < listado.size();i++)
+            		{
+            			sockManager.Escribir(listado.get(i)+'\n');
+            		}
+            		sockManager.Escribir("\n");
         		}
-        		System.out.println("\n");
-        		System.out.println("202 FINLISTA"+ CRLF);
+        		sockManager.Escribir("202 FINLISTA"+ CRLF);
         		
         	}else if (comando.equals("ON")){
         		String id_placa = rl[1];
@@ -126,6 +136,10 @@ final class HttpRequest implements Runnable {
     			}
 			}else if (comando.equals("SALIR")){
         		System.out.println("208 OK Adiós."+ CRLF);
+        		
+        	    sockManager.CerrarStreams();
+        	    sockManager.CerrarSocket();
+        		proceso = false;
 			}
         break;
         case 3:
