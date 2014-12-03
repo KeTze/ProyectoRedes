@@ -109,13 +109,13 @@ final class HttpRequest implements Runnable {
         		String id_placa = rl[1];
         		String id_variable = rl[2];
         		BaseDatos.connect();
-        		boolean estadoVariable = BaseDatos.estadoVariable(id_placa, id_variable);
+        		boolean estadoVariable = BaseDatos.estadoVariable(id_placa, id_variable);        		
         		if(estadoVariable){
         			sockManager.Escribir("404 ERROR "+id_variable+" en estado ON"+ CRLF);
         		}else{
         			try{
-        				BaseDatos.encenderVariable(id_variable, id_placa);
-        				sockManager.Escribir("203 OK "+id_variable+" activo"+ CRLF);
+        				BaseDatos.encenderVariable(id_placa, id_variable);
+        				sockManager.Escribir("203 OK "+id_variable+" activada"+ CRLF);
         			}catch(Exception e){
         				if(e.getMessage().equals("Variable Not Found")){
         					sockManager.Escribir("403 ERROR "+id_variable+" no existe"+ CRLF);
@@ -134,8 +134,8 @@ final class HttpRequest implements Runnable {
         			sockManager.Escribir("406 ERROR "+id_variable+" en estado OFF"+ CRLF);
         		}else{
         			try{
-        				BaseDatos.encenderVariable(id_variable, id_placa);
-        				sockManager.Escribir("204 OK "+id_variable+" activo"+ CRLF);
+        				BaseDatos.apagarVariable(id_placa, id_variable);
+        				sockManager.Escribir("204 OK "+id_variable+" desactivadao"+ CRLF);
         			}catch(Exception e){
         				if(e.getMessage().equals("Variable Not Found")){
         					sockManager.Escribir("405 ERROR "+id_variable+" no existe"+ CRLF);
@@ -171,7 +171,7 @@ final class HttpRequest implements Runnable {
         		}
         		BaseDatos.disconnect();
         		
-			}else if (comando.equals("OBTENER_FOTO")){
+			}else if (comando.equals("OBTENER_FOTO")){//*****************************************
 				String id_placa = rl[1];
     			if(true /*id_placa.existePlaca*/){
     				System.out.println("206 OK (MÉTODONºBYTES) bytes transmitiendo"+ CRLF);

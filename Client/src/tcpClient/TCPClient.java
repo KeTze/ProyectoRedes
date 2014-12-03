@@ -160,16 +160,23 @@ public class TCPClient {
 			//No se va a dar nunca en nuestro proyecto
 			JOptionPane.showMessageDialog( null, "Variable en estado OFF", "Error", JOptionPane.ERROR_MESSAGE );
 			return false;
-		}else if(respuesta.substring(0, 6).equals("203 OK")){
+		}else if(respuesta.substring(0, 6).equals("204 OK")){
 			return true;
 		}
 		return false;
 	}
 	
-	/*Faltan:
-	 * ACCION 
-	 */
+	public static ArrayList<String> obtenerAcciones() throws IOException{
+		
+	}
 	
+	public static boolean ejecutarAccion(String placa, String variable, String accion) throws IOException{
+		
+	}
+	
+	public static String obtenerParametro(String accion) throws IOException{
+		
+	}
 	/** Confirma una accion a realizar sobre la variable
 	 * @param parametro Parametro a enviar o null si no hay que enviar nada
 	 * @return true si ha sido correcta la confirmacion - false si faltan datos
@@ -206,7 +213,9 @@ public class TCPClient {
 		}
 	}
 	
-	//FALTA OBTENER_FOTO************************************************************
+	public static void obtenerFoto(String placa){
+		paqpete;
+	}
 	
 	/**Cierra la conexion con el servidor
 	 * @return true Si ha sido correcto - false Si no ha llegado confirmacion
@@ -249,9 +258,7 @@ public class TCPClient {
     		}
             
             
-            
-            
-            
+
             System.out.println("Fin de la prueba");
             sm.CerrarSocket();
         } catch (Exception e) {

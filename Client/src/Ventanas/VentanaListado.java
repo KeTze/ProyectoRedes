@@ -201,8 +201,10 @@ public class VentanaListado extends JFrame implements FocusListener {
 				try {
 					if(v.getEstado().equals("ON")){
 						TCPClient.apagarVariable(v.getPlaca(), v.getNombre());
+						
 					}else{
 						TCPClient.encenderVariable(v.getPlaca(), v.getNombre());
+						
 					}
 					actualizarTabla();
 				} catch (IOException e1) {

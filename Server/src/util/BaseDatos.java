@@ -134,22 +134,7 @@ public class BaseDatos {
 		stat.close();
 			
 		return aLObjetos; 
-	}
-	
-	public static void main(String[]args){
-		try {
-			BaseDatos.connect();
-			BaseDatos.buscarObjetos("variable", "tempe*");
-			//BaseDatos.listaObjetos();
-			BaseDatos.disconnect();
-		} catch ( SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
-	
+	}	
 	
 
 	public static ArrayList<String>buscarObjetos(String opcion, String patron) throws SQLException{
@@ -224,12 +209,23 @@ public class BaseDatos {
 		return aLAcciones; 
 	}
 	
-	//Mirar nombres columnas tablas
+	public static void main(String[]args){
+		try {
+			BaseDatos.connect();
+			BaseDatos.estadoVariable("Placa2", "Temperatura");
+			BaseDatos.apagarVariable("Placa2", "Temperatura");
+			//BaseDatos.listaObjetos();
+			BaseDatos.disconnect();
+		} catch ( SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
+	
 	public static void encenderVariable(String placa, String variable) throws SQLException{
 		
 		Statement stat = conn.createStatement();
-		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=1 where ID_VARIABLE='"+variable+"' AND ID_PLACA='"
-				+placa+"'");
+		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=1 where ID_VARIABLE='"+variable+"' AND ID_PLACA='"+placa+"'");
 		stat.close();
 		
 	}
