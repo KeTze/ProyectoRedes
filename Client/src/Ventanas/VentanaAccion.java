@@ -30,16 +30,23 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.BorderLayout;
+
 import javax.swing.JPanel;
+
 import java.awt.FlowLayout;
+
 import javax.swing.BoxLayout;
 import javax.swing.JRadioButton;
 
 public class VentanaAccion extends JFrame{
 	private static VentanaAccion window;
 	private String variable;
+	private ArrayList<JRadioButton> lButtons;
+	private String accion;
+	private String parametro;
 	/**
 	 * Launch the application.
 	 */
@@ -70,7 +77,7 @@ public class VentanaAccion extends JFrame{
 	 */
 	private void initialize() {
 		setBounds(100, 100, 365, 270);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -84,10 +91,11 @@ public class VentanaAccion extends JFrame{
 		getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
+		
 		//2 ArrayList. Uno con las acciones y otro con los JRadioButtons.
 				
 		ArrayList<String> lAcciones = new ArrayList<>();
-		ArrayList<JRadioButton> lButtons = new ArrayList<>();
+		lButtons = new ArrayList<>();
 		ButtonGroup bg = new ButtonGroup();
 		try {
 			lAcciones = TCPClient.obtenerAcciones(variable);
@@ -95,7 +103,7 @@ public class VentanaAccion extends JFrame{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}	
-		for (int i = 0; i < lAcciones.size(); i++)
+		for (int i = 0; i < lAcciones.size()-1; i++)
 		{
 			lButtons.add(new JRadioButton(lAcciones.get(i)));
 			lButtons.get(i).setBackground(Color.DARK_GRAY);
@@ -118,8 +126,80 @@ public class VentanaAccion extends JFrame{
 		
 		JButton btnSeleccionarAccin = new JButton("Seleccionar Acci\u00F3n");
 		panel_1.add(btnSeleccionarAccin);
+		btnSeleccionarAccin.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				boolean enc=false;
+				int i = 0;
+				accion = null;
+				while(!enc&&(lButtons.size()>i)){
+					if(lButtons.get(i).isSelected()){
+						accion = lButtons.get(i).getText();
+						enc=true;
+					}
+				}
+				try {
+					parametro = TCPClient.obtenerParametro(accion);
+					if(parametro==null){
+						int seleccion = JOptionPane.showOptionDialog(null, "¿Confirmar accion "+accion+"?", "Confirmacion", 
+								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "CONFIRMAR", "RECHAZAR" }, "CONFIRMAR");
+
+						if(seleccion==0){
+							dispose();
+							TCPClient.confirmarAccion(null);
+							
+						}else{
+							dispose();
+							TCPClient.rechazarAccion();
+						}
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									VentanaListado window1 = new VentanaListado(null);
+									window1.setVisible(true);
+									dispose();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						
+					}else{
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									VentanaConfirmar window1 = new VentanaConfirmar(parametro, accion);
+									window1.setVisible(true);
+									dispose();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					}
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JButton btnVolver = new JButton("Volver");
+		btnVolver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							VentanaListado window1 = new VentanaListado(null);
+							window1.setVisible(true);
+							dispose();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		});
 		panel_1.add(btnVolver);
 		setResizable(false);
 		setTitle("Control de Invernadero: Login");

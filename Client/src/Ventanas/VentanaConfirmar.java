@@ -34,8 +34,10 @@ import java.util.ArrayList;
 public class VentanaConfirmar extends JFrame{
 	private static VentanaConfirmar window;
 	private JTextField textField;
-	JButton btnConfirmar;
-	JButton btnRechazar;
+	private JButton btnConfirmar;
+	private JButton btnRechazar;
+	private String parametro;
+	private String accion;
 	/**
 	 * Launch the application.
 	 */
@@ -43,7 +45,7 @@ public class VentanaConfirmar extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window = new VentanaConfirmar();
+					window = new VentanaConfirmar("Parametro", "Accion");
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -55,8 +57,10 @@ public class VentanaConfirmar extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public VentanaConfirmar() {
+	public VentanaConfirmar(String parametro, String accion) {
 		super();
+		this.parametro = parametro;
+		this.accion = accion;
 		initialize();
 	}
 
@@ -75,10 +79,10 @@ public class VentanaConfirmar extends JFrame{
 		textField = new JTextField();
 		textField.setColumns(10);
 		
-		JLabel lblVariable = new JLabel("CambiaVariable");
+		JLabel lblVariable = new JLabel(parametro);
 		lblVariable.setForeground(Color.WHITE);
 		
-		JLabel lblParaccion = new JLabel("ParAccion");
+		JLabel lblParaccion = new JLabel("Parametro accion "+accion);
 		lblParaccion.setForeground(Color.WHITE);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -155,7 +159,7 @@ public class VentanaConfirmar extends JFrame{
 								EventQueue.invokeLater(new Runnable() {
 									public void run() {
 										try {
-											VentanaBuscar window1 = new VentanaBuscar();
+											VentanaListado window1 = new VentanaListado(null);
 											window1.setVisible(true);
 										} catch (Exception e) {
 											e.printStackTrace();

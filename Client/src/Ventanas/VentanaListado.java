@@ -22,9 +22,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import javax.swing.BoxLayout;
 
 import tcpClient.TCPClient;
@@ -229,6 +229,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 						try {
 							VentanaAccion frame = new VentanaAccion(v.getNombre());
 							frame.setVisible(true);
+							dispose();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
