@@ -175,10 +175,10 @@ public class BaseDatos {
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select A.ID_ACCION from ACCION A, AC_VAR AV "
 				+ "WHERE (A.ID_ACCION=AV.ID_ACCION) AND AV.ID_VARIABLE='"+Variable+"'");
-		
+		int numElem = 1;
 		while (rs.next()) {	
-			String s = rs.getString("ID_ACCION");;
-			
+			String s = "ACCION "+numElem+" "+rs.getString("ID_ACCION");
+			numElem++;
 			System.out.println(s);
 			aLAcciones.add(s);
 		}

@@ -149,7 +149,9 @@ final class HttpRequest implements Runnable {
 				if(rl.length==1){
 					sockManager.Escribir("410 ERR Falta variable"+ CRLF);
 				}else{
+					BaseDatos.connect();
 					ArrayList<String>aA = BaseDatos.obtenerListaAcciones(rl[1]);
+					BaseDatos.disconnect();
 					for(int i = 0; i < aA.size();i++)
 	        		{
 	        			sockManager.Escribir(aA.get(i)+'\n');
