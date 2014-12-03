@@ -4,6 +4,8 @@ import util.*;
 import java.util.ArrayList;
 import java.io.*;
 
+import javax.swing.JOptionPane;
+
 /**
  * <p>Title: practica1</p>
  *
@@ -58,10 +60,11 @@ public class TCPClient {
 		sm.Escribir("LISTADO"+'\n');
 		
 		String linea = sm.Leer();
+		System.out.println(linea);
 		while(!linea.equals("202 FINLISTA")){
 			if(linea!="\n"){
 				Variable v = new Variable();
-				String[] respuesta = linea.split(";");
+				String[] respuesta = linea.split("; ");
 				if(respuesta.length==5){
 					
 					String [] primerHueco = respuesta[0].split(" ");
@@ -80,6 +83,7 @@ public class TCPClient {
 
 			}
 			linea = sm.Leer();
+			System.out.println(linea);
 		}
 		
 		
@@ -98,10 +102,11 @@ public class TCPClient {
 		sm.Escribir("BUSCAR "+opcion+" "+patron+'\n');
 		
 		String linea = sm.Leer();
+		System.out.println(linea);
 		while(!linea.equals("202 FINLISTA")){
 			if(linea!="\n"){
 				Variable v = new Variable();
-				String[] respuesta = linea.split(";");
+				String[] respuesta = linea.split("; ");
 				if(respuesta.length==5){
 					
 					String [] primerHueco = respuesta[0].split(" ");
@@ -120,15 +125,48 @@ public class TCPClient {
 
 			}
 			linea = sm.Leer();
+			System.out.println(linea);
 		}
 		
 		
 		return aV;
 	}
 	
+	public static boolean encenderVariable(String placa, String variable) throws IOException{
+		sm.Escribir("ON "+placa+" "+variable+'\n');
+		String respuesta = sm.Leer();
+		System.out.println(respuesta);
+		if(respuesta.substring(0, 8).equals("403 ERROR")){
+			JOptionPane.showMessageDialog( null, "Variable no existe", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}else if(respuesta.substring(0, 8).equals("404 ERROR")){
+			//No se va a dar nunca en nuestro proyecto
+			JOptionPane.showMessageDialog( null, "Variable en estado ON", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}else if(respuesta.substring(0, 6).equals("203 OK")){
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean apagarVariable(String placa, String variable) throws IOException{
+		sm.Escribir("OFF "+placa+" "+variable+'\n');
+		String respuesta = sm.Leer();
+		System.out.println(respuesta);
+		if(respuesta.substring(0, 8).equals("405 ERROR")){
+			JOptionPane.showMessageDialog( null, "Variable no existe", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}else if(respuesta.substring(0, 8).equals("406 ERROR")){
+			//No se va a dar nunca en nuestro proyecto
+			JOptionPane.showMessageDialog( null, "Variable en estado OFF", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}else if(respuesta.substring(0, 6).equals("203 OK")){
+			return true;
+		}
+		return false;
+	}
+	
 	/*Faltan:
-	 * ON VARIABLE
-	 * OFF VARIABLE
 	 * ACCION 
 	 */
 	
@@ -175,7 +213,7 @@ public class TCPClient {
 	 * @throws IOException
 	 */
 	public static boolean salir() throws IOException{
-		sm.Escribir("SALIR "+'\n');
+		sm.Escribir("SALIR"+'\n');
 		String s = sm.Leer();
 		System.out.println(s);
 		if(s.equals("208 OK Adios")){

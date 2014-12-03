@@ -108,24 +108,42 @@ final class HttpRequest implements Runnable {
         	}else if (comando.equals("ON")){
         		String id_placa = rl[1];
         		String id_variable = rl[2];
-    			if(true /*id_variable.existeVariable*/){
-    				System.out.println("203 OK Control de temperatura activo"+ CRLF);
-    			}else if(BaseDatos.estadoVariable(id_placa, id_variable)){
-    				System.out.println("404 ERROR id_variable en estado ON"+ CRLF);
-    			}else if(true /*!id_variable.existeVariable*/){
-    				System.out.println("403 ERROR id_variable no existe"+ CRLF);
-    			}
+        		BaseDatos.connect();
+        		boolean estadoVariable = BaseDatos.estadoVariable(id_placa, id_variable);
+        		if(estadoVariable){
+        			sockManager.Escribir("404 ERROR "+id_variable+" en estado ON"+ CRLF);
+        		}else{
+        			try{
+        				BaseDatos.encenderVariable(id_variable, id_placa);
+        				sockManager.Escribir("203 OK "+id_variable+" activo"+ CRLF);
+        			}catch(Exception e){
+        				if(e.getMessage().equals("Variable Not Found")){
+        					sockManager.Escribir("403 ERROR "+id_variable+" no existe"+ CRLF);
+        				}
+        			}
+        		}
+    			
+    			BaseDatos.disconnect();
     			
 			}else if (comando.equals("OFF")){
 				String id_placa = rl[1];
         		String id_variable = rl[2];
-				if(true /*id_variable.existeVariable*/){
-    				System.out.println("204 OK Control de temperatura desactivado"+ CRLF);
-    			}else if(!BaseDatos.estadoVariable(id_placa, id_variable)){
-    				System.out.println("406 ERROR id_variable en estado OFF"+ CRLF);
-    			}else if(true /*!id_variable.existeVariable*/){
-    				System.out.println("405 ERROR id_variable no existe"+ CRLF);
-    			}
+        		BaseDatos.connect();
+        		boolean estadoVariable = BaseDatos.estadoVariable(id_placa, id_variable);
+        		if(!estadoVariable){
+        			sockManager.Escribir("406 ERROR "+id_variable+" en estado OFF"+ CRLF);
+        		}else{
+        			try{
+        				BaseDatos.encenderVariable(id_variable, id_placa);
+        				sockManager.Escribir("204 OK "+id_variable+" activo"+ CRLF);
+        			}catch(Exception e){
+        				if(e.getMessage().equals("Variable Not Found")){
+        					sockManager.Escribir("405 ERROR "+id_variable+" no existe"+ CRLF);
+        				}
+        			}
+        		}
+    			
+    			BaseDatos.disconnect();
 				
 			}else if (comando.equals("ACCION")){
 				String id_placa = rl[1];
@@ -139,16 +157,16 @@ final class HttpRequest implements Runnable {
             				sockManager.Escribir("205 OK Esperando confirmacion"+ CRLF);
             				estado++;
             			}else{
-            				sockManager.Escribir("406 ERROR id_variable en estado OFF"+ CRLF);
+            				sockManager.Escribir("408 ERROR id_variable en estado OFF"+ CRLF);
             			}
             		}else{
-            			sockManager.Escribir("406 ERROR id_variable en estado OFF"+ CRLF);
+            			sockManager.Escribir("408 ERROR placa en estado OFF"+ CRLF);
             		}
         		}catch(SQLException e){
         			if(e.getMessage().equals("Variable Not Found")){
-        				sockManager.Escribir("405 ERROR id_variable no existe"+ CRLF);
+        				sockManager.Escribir("407 ERROR id_variable no existe"+ CRLF);
         			}else if(e.getMessage().equals("Placa Not Found")){
-        				sockManager.Escribir("405 ERROR id_placa no existe"+ CRLF);
+        				sockManager.Escribir("407 ERROR id_placa no existe"+ CRLF);
         			}
         		}
         		BaseDatos.disconnect();
@@ -161,7 +179,7 @@ final class HttpRequest implements Runnable {
     				System.out.println("403 ERR Identificador no existe"+ CRLF);
     			}
 			}else if (comando.equals("SALIR")){
-        		System.out.println("208 OK Adiós."+ CRLF);
+        		sockManager.Escribir("208 OK Adiós."+ CRLF);
         		
         	    sockManager.CerrarStreams();
         	    sockManager.CerrarSocket();
@@ -169,7 +187,7 @@ final class HttpRequest implements Runnable {
 			}
         break;
         case 3:
-			if (comando.equals("CONFIRMAR_ACCION")) {
+			if (comando.equals("CONFIRMAR_ACCION")) {	//Hacer****************************************
 				if(rl.length == 1){
 	    			System.out.println("409 ERR Faltan datos"+ CRLF);
 	    		}else{

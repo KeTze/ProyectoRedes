@@ -227,35 +227,18 @@ public class BaseDatos {
 	//Mirar nombres columnas tablas
 	public static void encenderVariable(String placa, String variable) throws SQLException{
 		
-		Statement stat2 = conn.createStatement();
-		ResultSet rs = stat2.executeQuery("select ID_VARIABLE from VARIABLE V, PL_VAR, PLACA P where "
-				+ "V.ID=PL.ID_VARIABLE AND PL.ID_PLACA=P.ID AND NOMBRE='"+variable+"' AND P.ID='"+placa+"'");
-		int idVariable = 0;
-		while(rs.next()){
-			idVariable = rs.getInt("ID_VARIABLE");
-		}
-		stat2.close();
 		Statement stat = conn.createStatement();
-		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=1 where ID_VARIABLE="+idVariable+" AND ID_PLACA='"
-				+variable+"'");
+		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=1 where ID_VARIABLE='"+variable+"' AND ID_PLACA='"
+				+placa+"'");
 		stat.close();
 		
 	}
 	
 	public static void apagarVariable(String placa, String variable) throws SQLException{
 		
-		Statement stat2 = conn.createStatement();
-		ResultSet rs = stat2.executeQuery("select ID_VARIABLE from VARIABLE V, PL_VAR, PLACA P where "
-				+ "V.ID=PL.ID_VARIABLE AND PL.ID_PLACA=P.ID AND NOMBRE='"+variable+"' AND P.ID='"+placa+"'");
-		int idVariable = 0;
-		while(rs.next()){
-			idVariable = rs.getInt("ID_VARIABLE");
-		}
-		stat2.close();
-		
 		Statement stat = conn.createStatement();
-		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=0 where ID_VARIABLE="+idVariable+" AND ID_PLACA='"
-				+variable+"'");
+		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=0 where ID_VARIABLE='"+variable+"' AND ID_PLACA='"
+				+placa+"'");
 		stat.close();
 		
 	}
@@ -263,10 +246,8 @@ public class BaseDatos {
 	public static boolean estadoVariable(String placa, String variable) throws SQLException{
 		
 		Statement stat = conn.createStatement();
-		ResultSet rs = stat.executeQuery("select ESTADO from VARIABLE V, PL_VAR PV, PLACA P where "
-				+ "V.ID_VARIABLE=PV.ID_VARIABLE AND PV.ID_PLACA=P.ID AND V.ID_VARIABLE='"+variable+"' AND P.ID='"+placa+"'");
+		ResultSet rs = stat.executeQuery("select ESTADO from PL_VAR PV where ID_VARIABLE='"+variable+"' AND ID_PLACA='"+placa+"'");
 		boolean estado = false;
-		
 		if(rs.next()){
 			estado = rs.getBoolean("ESTADO");
 		}else{
@@ -282,7 +263,7 @@ public class BaseDatos {
 	public static boolean estadoPlaca(String placa) throws SQLException{
 		
 		Statement stat = conn.createStatement();
-		ResultSet rs = stat.executeQuery("select ESTADO from PLACA P where ID='"+placa+"'");
+		ResultSet rs = stat.executeQuery("select ESTADO from PLACA P where ID_PLACA='"+placa+"'");
 		boolean estado = false;
 		if(rs.next()){
 			estado = rs.getBoolean("ESTADO");
