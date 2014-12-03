@@ -81,10 +81,32 @@ public class VentanaAccion extends JFrame{
 		getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
+		//2 ArrayList. Uno con las acciones y otro con los JRadioButtons.
+				
+		ArrayList<String> lAcciones = new ArrayList<>();
+		ArrayList<JRadioButton> lButtons = new ArrayList<>();
+		
+		try {
+			lAcciones = TCPClient.obtenerAcciones();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
+		for (int i = 0; i < lAcciones.size(); i++)
+		{
+			lButtons.add(new JRadioButton(lAcciones.get(i)));
+			
+			lButtons.get(i).setBackground(Color.DARK_GRAY);
+			lButtons.get(i).setForeground(Color.WHITE);
+			panel.add(lButtons.get(i));
+		}
+		
+		/*
 		JRadioButton rdbtnHhh = new JRadioButton("hhh");
 		rdbtnHhh.setBackground(Color.DARK_GRAY);
 		rdbtnHhh.setForeground(Color.WHITE);
 		panel.add(rdbtnHhh);
+		*/
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.DARK_GRAY);
