@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 
 import java.awt.Font;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
@@ -87,7 +88,7 @@ public class VentanaAccion extends JFrame{
 				
 		ArrayList<String> lAcciones = new ArrayList<>();
 		ArrayList<JRadioButton> lButtons = new ArrayList<>();
-		
+		ButtonGroup bg = new ButtonGroup();
 		try {
 			lAcciones = TCPClient.obtenerAcciones(variable);
 		} catch (IOException e1) {
@@ -97,9 +98,9 @@ public class VentanaAccion extends JFrame{
 		for (int i = 0; i < lAcciones.size(); i++)
 		{
 			lButtons.add(new JRadioButton(lAcciones.get(i)));
-			
 			lButtons.get(i).setBackground(Color.DARK_GRAY);
 			lButtons.get(i).setForeground(Color.WHITE);
+			bg.add(lButtons.get(i));
 			panel.add(lButtons.get(i));
 		}
 		
