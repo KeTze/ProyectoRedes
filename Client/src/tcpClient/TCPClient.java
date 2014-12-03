@@ -167,15 +167,15 @@ public class TCPClient {
 	}
 	
 	public static ArrayList<String> obtenerAcciones() throws IOException{
-		
+		 
 	}
 	
 	public static boolean ejecutarAccion(String placa, String variable, String accion) throws IOException{
-		
+		return true;
 	}
 	
 	public static String obtenerParametro(String accion) throws IOException{
-		
+		return null;
 	}
 	/** Confirma una accion a realizar sobre la variable
 	 * @param parametro Parametro a enviar o null si no hay que enviar nada
