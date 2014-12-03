@@ -38,6 +38,7 @@ import javax.swing.JRadioButton;
 
 public class VentanaAccion extends JFrame{
 	private static VentanaAccion window;
+	private String variable;
 	/**
 	 * Launch the application.
 	 */
@@ -45,7 +46,7 @@ public class VentanaAccion extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window = new VentanaAccion();
+					window = new VentanaAccion("Temperatura");
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,8 +58,9 @@ public class VentanaAccion extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public VentanaAccion() {
+	public VentanaAccion(String variable) {
 		super();
+		this.variable = variable;
 		initialize();
 	}
 
@@ -87,7 +89,7 @@ public class VentanaAccion extends JFrame{
 		ArrayList<JRadioButton> lButtons = new ArrayList<>();
 		
 		try {
-			lAcciones = TCPClient.obtenerAcciones();
+			lAcciones = TCPClient.obtenerAcciones(variable);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
