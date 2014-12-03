@@ -222,18 +222,18 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panel_2.add(btnEjecutarAccion);
 		btnEjecutarAccion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*int seleccion = JOptionPane.showOptionDialog(null, "¿Desea Alquilar el libro "+lVariable.get(filaS).getTitulo()+"?", "Alquilar", 
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "Si", "No" }, "Si");
-				if(seleccion==0){
-
-					try {
-						alquilar( filaS);
-					} catch (ClassNotFoundException | SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+				EventQueue.invokeLater(new Runnable() {
+					int i = table_1.getSelectedRow();
+					Variable v = lVariable.get(i);
+					public void run() {
+						try {
+							VentanaAccion frame = new VentanaAccion(v.getNombre());
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
-
-				}*/
+				});
 
 			}
 		});
