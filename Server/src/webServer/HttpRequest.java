@@ -145,7 +145,21 @@ final class HttpRequest implements Runnable {
     			
     			BaseDatos.disconnect();
 				
-			}else if (comando.equals("ACCION")){
+			}else if(comando.equals("ACCIONES")){
+				if(rl.length==1){
+					sockManager.Escribir("410 ERR Falta variable"+ CRLF);
+				}else{
+					ArrayList<String>aA = BaseDatos.obtenerListaAcciones(rl[1]);
+					for(int i = 0; i < aA.size();i++)
+	        		{
+	        			sockManager.Escribir(aA.get(i)+'\n');
+	        		}
+	        		sockManager.Escribir("\n");
+	        		sockManager.Escribir("202 FINLISTA"+ CRLF);
+					
+				}
+				
+			}else if (comando.equals("ACCION")){	//Falta terminarla
 				String id_placa = rl[1];
         		String id_variable = rl[2];
         		String accion = rl[3];

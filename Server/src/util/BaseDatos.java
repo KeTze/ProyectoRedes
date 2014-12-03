@@ -80,27 +80,7 @@ public class BaseDatos {
 	   return enc;
 	 }
 	
-	/**
-	 * Cambia el precio de alquiler y/o de venta de un libro
-	 * @param isbn
-	 * @param precioV
-	 * @param precioAl
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * @throws RowNotFoundException
-	 */
-	/*public static void gestionarLibro(String isbn,int precioV,int precioAl) throws ClassNotFoundException, SQLException, RowNotFoundException{
-		Libro l = BaseDatos.obtenerLibro(isbn);
-		if(l==null){
-			throw new RowNotFoundException();
-		}
-		connect();
-		Statement stat = conn.createStatement();
-		stat.executeUpdate("UPDATE Libros SET precio_venta="+precioV+" where isbn='"+isbn+"'");
-		stat.executeUpdate("UPDATE Libros SET precio_al="+precioAl+" where isbn='"+isbn+"'");
-		stat.close();
-		disconnect();	
-	}*/
+	
 	
 	/**
 	 * Sirve para devolver una lista de todos los objetos del sistema
@@ -194,12 +174,12 @@ public class BaseDatos {
 		
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select A.ID_ACCION from ACCION A, AC_VAR AV "
-				+ "WHERE (A.ID_ACCION=AV.ID_ACCION)");
+				+ "WHERE (A.ID_ACCION=AV.ID_ACCION) AND AV.ID_VARIABLE='"+Variable+"'");
 		
 		while (rs.next()) {	
 			String s = rs.getString("ID_ACCION");;
 			
-			//System.out.println(s);
+			System.out.println(s);
 			aLAcciones.add(s);
 		}
 		
@@ -212,8 +192,8 @@ public class BaseDatos {
 	public static void main(String[]args){
 		try {
 			BaseDatos.connect();
-			BaseDatos.estadoVariable("Placa2", "Temperatura");
-			BaseDatos.apagarVariable("Placa2", "Temperatura");
+			BaseDatos.obtenerListaAcciones("Temperatura");
+			//BaseDatos.apagarVariable("Placa2", "Temperatura");
 			//BaseDatos.listaObjetos();
 			BaseDatos.disconnect();
 		} catch ( SQLException e) {

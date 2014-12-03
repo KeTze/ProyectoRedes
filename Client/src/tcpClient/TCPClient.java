@@ -166,16 +166,59 @@ public class TCPClient {
 		return false;
 	}
 	
-	public static ArrayList<String> obtenerAcciones() throws IOException{
+	public static ArrayList<String> obtenerAcciones(String variable) throws IOException{
+		ArrayList <String> aA = new ArrayList<>();
+		sm.Escribir("ACCIONES "+variable+'\n');
 		
+		String linea = sm.Leer();
+		System.out.println(linea);
+		while(!linea.equals("202 FINLISTA")){
+			if(linea!="\n"){
+				String[] respuesta = linea.split(" ");
+				
+					String s = "";
+					//Por si hay espacios
+					for(int i=2; i<respuesta.length;i++){
+						s = s + respuesta[i];
+						if(i+1!=respuesta.length){
+							s = s+" ";
+						}
+					}
+					
+					aA.add(s);
+				
+
+			}
+			linea = sm.Leer();
+			System.out.println(linea);
+		}
+		
+		
+		return aA;
 	}
 	
 	public static boolean ejecutarAccion(String placa, String variable, String accion) throws IOException{
 		
 	}
 	
-	public static String obtenerParametro(String accion) throws IOException{
+	public static String obtenerParametro(String accion) throws IOException{//************************************************************HACER
 		
+		sm.Escribir("PARAMETRO "+accion+'\n');
+		
+		String linea = sm.Leer();
+		System.out.println(linea);
+		
+		String[] respuesta = linea.split(" ");
+		
+		String s = "";
+		//Por si hay espacios
+		for(int i=2; i<respuesta.length;i++){
+			s = s + respuesta[i];
+			if(i+1!=respuesta.length){
+				s = s+" ";
+			}
+		}
+		return s;
 	}
 	/** Confirma una accion a realizar sobre la variable
 	 * @param parametro Parametro a enviar o null si no hay que enviar nada
