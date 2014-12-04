@@ -142,8 +142,15 @@ public class VentanaListado extends JFrame implements FocusListener {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					TCPClient.salir();
-					TCPClient.desconectar();
 					dispose();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					TCPClient.desconectar();
+					
 					
 				} catch (Exception e) {
 					e.printStackTrace();

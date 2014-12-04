@@ -156,7 +156,6 @@ public class VentanaAccion extends JFrame{
 							}else{
 								dispose();
 								TCPClient.rechazarAccion();
-								
 							}
 							EventQueue.invokeLater(new Runnable() {
 								public void run() {

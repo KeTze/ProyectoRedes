@@ -285,6 +285,7 @@ public class TCPClient {
 		sm.Escribir("SALIR"+'\n');
 		String s = sm.Leer();
 		System.out.println(s);
+		
 		if(s.equals("208 OK Adios")){
 			return true;
 		}else{

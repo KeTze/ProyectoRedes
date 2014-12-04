@@ -176,6 +176,9 @@ final class HttpRequest implements Runnable {
         		String accion = "";
 				for(int i=3; i<rl.length; i++){
 					accion = accion+rl[i];
+					if(i+1!=rl.length){
+						accion = accion+" ";
+					}
 				}
 				
         		BaseDatos.connect();
@@ -210,7 +213,7 @@ final class HttpRequest implements Runnable {
     				System.out.println("403 ERR Identificador no existe"+ CRLF);
     			}
 			}else if (comando.equals("SALIR")){
-        		sockManager.Escribir("208 OK Adios."+ CRLF);
+				sockManager.Escribir("208 OK Adios"+ CRLF);
         		
         	    sockManager.CerrarStreams();
         	    sockManager.CerrarSocket();
@@ -219,13 +222,25 @@ final class HttpRequest implements Runnable {
         break;
         case 3:
 			if (comando.equals("CONFIRMAR_ACCION")) {	//Hacer****************************************
-				if(rl.length == 1){
-	    			System.out.println("409 ERR Faltan datos"+ CRLF);
-	    		}else{
-	    			//String parametro = rl[1];
-	    			System.out.println("206 OK Accion sobre el sensor confirmada"+ CRLF);
-	    			estado--;
-	    		}
+				if(parametro){
+					if(rl.length == 1){
+						sockManager.Escribir("409 ERR Faltan datos"+ CRLF);
+		    		}else{
+		    			//String parametro = rl[1];
+		    			sockManager.Escribir("206 OK Accion sobre el sensor confirmada"+ CRLF);
+		    			BaseDatos.connect();
+		    			BaseDatos.cambiarUltimaAccion(id_placa, id_variable, accion);
+		    			BaseDatos.disconnect();
+		    			estado--;
+		    		}
+				}else{
+					sockManager.Escribir("206 OK Accion sobre el sensor confirmada"+ CRLF);
+					BaseDatos.connect();
+					BaseDatos.cambiarUltimaAccion(id_placa, id_variable, accion);
+					BaseDatos.disconnect();
+					estado--;
+				}
+				
 				
 			}else if (comando.equals("RECHAZAR_ACCION")){
         		sockManager.Escribir("207 OK Accion cancelada"+ CRLF);
@@ -237,6 +252,9 @@ final class HttpRequest implements Runnable {
 					String accion = "";
 					for(int i=1; i<rl.length; i++){
 						accion = accion+rl[i];
+						if(i+1!=rl.length){
+							accion = accion+" ";
+						}
 					}
 					BaseDatos.connect();
 					String parametro = BaseDatos.obtenerParametro(accion);

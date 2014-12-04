@@ -69,7 +69,7 @@ public class VentanaConfirmar extends JFrame{
 	 */
 	private void initialize() {
 		setBounds(100, 100, 365, 195);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
 		
@@ -156,6 +156,7 @@ public class VentanaConfirmar extends JFrame{
 							boolean correcto = TCPClient.confirmarAccion(textField.getText());
 							if (correcto)
 							{
+								dispose();
 								EventQueue.invokeLater(new Runnable() {
 									public void run() {
 										try {

@@ -266,11 +266,20 @@ public class BaseDatos {
 	}
 	
 	public static void cambiarUltimaAccion(String placa, String variable, String accion) throws SQLException{
-		
+		Statement stat = conn.createStatement();
+		stat.executeUpdate("UPDATE PL_VAR SET ID_ULTIMA_ACCION='"+accion+"' where ID_VARIABLE='"+variable+"' AND ID_PLACA='"+placa+"'");
+		stat.close();
 	}
 	
-	public String obtenerFoto(String placa) throws SQLException{
-		return null;
+	public static String obtenerFoto(String placa) throws SQLException{
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select FOTO from PLACA where ID='"+placa+"'");
+		String url = null;
+		if(rs.next()){
+			url = rs.getString("FOTO");
+		}
+		stat.close();
+		return url;
 	}
 	
 	public static void anyadirUsuario(String nombre, String pass) throws SQLException{
