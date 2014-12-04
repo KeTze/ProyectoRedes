@@ -168,7 +168,7 @@ public class VentanaConfirmar extends JFrame{
 								});
 							}else{
 								textField.setBackground(Color.YELLOW);
-								JOptionPane.showMessageDialog( null, "Faltan los datos", "Error", JOptionPane.ERROR_MESSAGE );
+								JOptionPane.showMessageDialog( null, "Faltan el parametro", "Error", JOptionPane.ERROR_MESSAGE );
 								btnConfirmar.setEnabled(true);
 								btnRechazar.setEnabled(true);
 							}

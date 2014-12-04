@@ -227,7 +227,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 					Variable v = lVariable.get(i);
 					public void run() {
 						try {
-							VentanaAccion frame = new VentanaAccion(v.getNombre());
+							VentanaAccion frame = new VentanaAccion(v.getNombre(), v.getPlaca());
 							frame.setVisible(true);
 							dispose();
 						} catch (Exception e) {
@@ -366,7 +366,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 				if(comboBox.getSelectedItem().equals("Por funcion principal")){
 					
 					try {
-						lVariable = TCPClient.obtenerBusqueda("funcion principal", txtBusqueda.getText());
+						lVariable = TCPClient.obtenerBusqueda("funcion_principal", txtBusqueda.getText());
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog( null, "Error al realizar la busqueda", "Error", JOptionPane.ERROR_MESSAGE );
 					}
@@ -388,7 +388,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 				if(comboBox.getSelectedItem().equals("Por ultima accion")){
 					
 					try {
-						lVariable = TCPClient.obtenerBusqueda("ultima accion", txtBusqueda.getText());
+						lVariable = TCPClient.obtenerBusqueda("ultima_accion", txtBusqueda.getText());
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog( null, "Error al realizar la busqueda", "Error", JOptionPane.ERROR_MESSAGE );
 					}

@@ -10,6 +10,7 @@ import util.SocketManager;
 
 final class HttpRequest implements Runnable {
 
+ 
   final static String CRLF = "\r\n";
   SocketManager sockManager;
   int estado;
@@ -29,17 +30,25 @@ final class HttpRequest implements Runnable {
       System.out.println(e);
     }
   }
-
+  
+  //Para realizar la confirmacion:
+  private String id_variable;
+  private String id_placa;	
+  private String accion;
+  private boolean parametro;
+  
+  
   private void processRequest() throws Exception{
     // Get the request line of the HTTP request message.
 	  boolean proceso = true;
    while (proceso){
-	 String requestLine = sockManager.Leer();
+	   System.out.println("Estado"+estado);
+	   String requestLine = sockManager.Leer();
     System.out.println("RequestLine: " + requestLine);
     //sockManager.Escribir(requestLine+ '\n');
     String[] rl = requestLine.split(" ");
     String comando = rl[0];
-    System.out.println("Estado"+estado);
+   
     switch (estado) {
 		case 0:
 	    	if (comando.equals("USER")) {
@@ -161,16 +170,22 @@ final class HttpRequest implements Runnable {
 					
 				}
 				
-			}else if (comando.equals("ACCION")){	//Falta terminarla
+			}else if(comando.equals("ACCION")){
 				String id_placa = rl[1];
         		String id_variable = rl[2];
-        		String accion = rl[3];
+        		String accion = "";
+				for(int i=3; i<rl.length; i++){
+					accion = accion+rl[i];
+				}
+				
         		BaseDatos.connect();
         		try{
         			if(BaseDatos.estadoPlaca(id_placa)){
             			if(BaseDatos.estadoVariable(id_placa, id_variable)){
-            				//BaseDatos.cambiarUltimaAccion(id_placa, id_variable, accion);
             				sockManager.Escribir("205 OK Esperando confirmacion"+ CRLF);
+            				this.id_variable = id_variable;
+            				this.id_placa = id_placa;
+            				this.accion = accion;
             				estado++;
             			}else{
             				sockManager.Escribir("408 ERROR id_variable en estado OFF"+ CRLF);
@@ -195,7 +210,7 @@ final class HttpRequest implements Runnable {
     				System.out.println("403 ERR Identificador no existe"+ CRLF);
     			}
 			}else if (comando.equals("SALIR")){
-        		sockManager.Escribir("208 OK Adiós."+ CRLF);
+        		sockManager.Escribir("208 OK Adios."+ CRLF);
         		
         	    sockManager.CerrarStreams();
         	    sockManager.CerrarSocket();
@@ -207,13 +222,33 @@ final class HttpRequest implements Runnable {
 				if(rl.length == 1){
 	    			System.out.println("409 ERR Faltan datos"+ CRLF);
 	    		}else{
-	    			String parametro = rl[1];
-	    			System.out.println("206 OK Acción sobre el sensor confirmada"+ CRLF);
+	    			//String parametro = rl[1];
+	    			System.out.println("206 OK Accion sobre el sensor confirmada"+ CRLF);
+	    			estado--;
 	    		}
 				
 			}else if (comando.equals("RECHAZAR_ACCION")){
-        		System.out.println("207 OK Acción cancelada"+ CRLF);
+        		sockManager.Escribir("207 OK Accion cancelada"+ CRLF);
         		estado--;
+			}else if (comando.equals("PARAMETRO")){
+				if(rl.length==1){
+					sockManager.Escribir("411 ERROR Falta accion"+ CRLF);
+				}else{
+					String accion = "";
+					for(int i=1; i<rl.length; i++){
+						accion = accion+rl[i];
+					}
+					BaseDatos.connect();
+					String parametro = BaseDatos.obtenerParametro(accion);
+					BaseDatos.disconnect();
+					if(parametro==null){
+						this.parametro=false;
+						sockManager.Escribir("209 OK No hay parametro"+ CRLF);
+					}else{
+						this.parametro=true;
+						sockManager.Escribir("210 OK "+parametro+CRLF);
+					}
+				}
 			}
 		break;
     }

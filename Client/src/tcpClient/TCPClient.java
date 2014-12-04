@@ -136,10 +136,10 @@ public class TCPClient {
 		sm.Escribir("ON "+placa+" "+variable+'\n');
 		String respuesta = sm.Leer();
 		System.out.println(respuesta);
-		if(respuesta.substring(0, 8).equals("403 ERROR")){
+		if(respuesta.substring(0, 9).equals("403 ERROR")){
 			JOptionPane.showMessageDialog( null, "Variable no existe", "Error", JOptionPane.ERROR_MESSAGE );
 			return false;
-		}else if(respuesta.substring(0, 8).equals("404 ERROR")){
+		}else if(respuesta.substring(0, 9).equals("404 ERROR")){
 			//No se va a dar nunca en nuestro proyecto
 			JOptionPane.showMessageDialog( null, "Variable en estado ON", "Error", JOptionPane.ERROR_MESSAGE );
 			return false;
@@ -153,10 +153,10 @@ public class TCPClient {
 		sm.Escribir("OFF "+placa+" "+variable+'\n');
 		String respuesta = sm.Leer();
 		System.out.println(respuesta);
-		if(respuesta.substring(0, 8).equals("405 ERROR")){
+		if(respuesta.substring(0, 9).equals("405 ERROR")){
 			JOptionPane.showMessageDialog( null, "Variable no existe", "Error", JOptionPane.ERROR_MESSAGE );
 			return false;
-		}else if(respuesta.substring(0, 8).equals("406 ERROR")){
+		}else if(respuesta.substring(0, 9).equals("406 ERROR")){
 			//No se va a dar nunca en nuestro proyecto
 			JOptionPane.showMessageDialog( null, "Variable en estado OFF", "Error", JOptionPane.ERROR_MESSAGE );
 			return false;
@@ -199,28 +199,42 @@ public class TCPClient {
 	}
 	
 	public static boolean ejecutarAccion(String placa, String variable, String accion) throws IOException{
-		return true;
+		sm.Escribir("ACCION "+placa+" "+variable+" "+accion+'\n');
+		String linea = sm.Leer();
+		System.out.println(linea);
+		if(linea.equals("407 ERROR id_variable no existe")){
+			JOptionPane.showMessageDialog( null, "Variable no existe", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}else if(linea.equals("408 ERROR id_variable en estado OFF")){
+			JOptionPane.showMessageDialog( null, "Variable en estado OFF", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}else if(linea.equals("205 OK Esperando confirmacion")){
+			return true;
+		}else if(linea.equals("407 ERROR placa no existe")){
+			JOptionPane.showMessageDialog( null, "Placa no existe", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}else if(linea.equals("408 ERROR placa en estado OFF")){
+			JOptionPane.showMessageDialog( null, "Placa en estado OFF", "Error", JOptionPane.ERROR_MESSAGE );
+			return false;
+		}
+		return false;
+		
 	}
 	
 
-	public static String obtenerParametro(String accion) throws IOException{//************************************************************HACER
-		
+	public static String obtenerParametro(String accion) throws IOException{
 		sm.Escribir("PARAMETRO "+accion+'\n');
 		
 		String linea = sm.Leer();
 		System.out.println(linea);
 		
 		String[] respuesta = linea.split(" ");
-		
-		String s = "";
-		//Por si hay espacios
-		for(int i=2; i<respuesta.length;i++){
-			s = s + respuesta[i];
-			if(i+1!=respuesta.length){
-				s = s+" ";
-			}
+		if(respuesta[0].equals("209")){
+			return null;
+		}else if(respuesta[0].equals("210")){
+			return respuesta[2];
 		}
-		return s;
+		return "Error";
 
 	}
 	/** Confirma una accion a realizar sobre la variable
@@ -230,9 +244,9 @@ public class TCPClient {
 	 */
 	public static boolean confirmarAccion(String parametro) throws IOException{
 		if(parametro==null){
-			sm.Escribir("CONFIRMAR_ACCION "+'\n');
+			sm.Escribir("CONFIRMAR_ACCION"+'\n');
 		}else{
-			sm.Escribir("CONFIRMAR_ACCION "+parametro+" "+'\n');
+			sm.Escribir("CONFIRMAR_ACCION "+parametro+'\n');
 		}
 		String s = sm.Leer();
 		System.out.println(s);
@@ -249,7 +263,7 @@ public class TCPClient {
 	 * @throws IOException
 	 */
 	public static boolean rechazarAccion() throws IOException{
-		sm.Escribir("RECHAZAR_ACCION "+'\n');
+		sm.Escribir("RECHAZAR_ACCION"+'\n');
 		String s = sm.Leer();
 		System.out.println(s);
 		if(s.equals("207 OK Accion cancelada")){
@@ -288,7 +302,8 @@ public class TCPClient {
             SocketManager sm = new SocketManager("127.0.0.1", 3000);
             sm.Escribir("USER user"+'\n');
             sm.Escribir("PASS pass"+'\n');
-            sm.Escribir("BUSCAR variable temperatu*"+'\n');
+            sm.Escribir("ACCIONES Iluminacion"+'\n');
+            sm.Escribir("ACCION Placa1 Iluminacion"+'\n');
             //sm.Escribir("LISTADO"+'\n');
            // ArrayList <Variable> aV = new ArrayList<>();
     		

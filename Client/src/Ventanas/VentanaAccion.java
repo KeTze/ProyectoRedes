@@ -47,6 +47,7 @@ public class VentanaAccion extends JFrame{
 	private ArrayList<JRadioButton> lButtons;
 	private String accion;
 	private String parametro;
+	private String placa;
 	/**
 	 * Launch the application.
 	 */
@@ -54,7 +55,7 @@ public class VentanaAccion extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window = new VentanaAccion("Temperatura");
+					window = new VentanaAccion("Temperatura", "Placa2");
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,9 +67,10 @@ public class VentanaAccion extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public VentanaAccion(String variable) {
+	public VentanaAccion(String variable, String placa) {
 		super();
 		this.variable = variable;
+		this.placa = placa;
 		initialize();
 	}
 
@@ -131,26 +133,57 @@ public class VentanaAccion extends JFrame{
 				boolean enc=false;
 				int i = 0;
 				accion = null;
-				while(!enc&&(lButtons.size()>i)){
+				while(!enc&&(i<lButtons.size())){
 					if(lButtons.get(i).isSelected()){
 						accion = lButtons.get(i).getText();
 						enc=true;
 					}
+					i++;
 				}
 				try {
-					parametro = TCPClient.obtenerParametro(accion);
-					if(parametro==null){
-						int seleccion = JOptionPane.showOptionDialog(null, "¿Confirmar accion "+accion+"?", "Confirmacion", 
-								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "CONFIRMAR", "RECHAZAR" }, "CONFIRMAR");
+					boolean res = TCPClient.ejecutarAccion(placa, variable, accion);
+					if(res){
+						parametro = TCPClient.obtenerParametro(accion);
+						if(parametro==null){
+							int seleccion = JOptionPane.showOptionDialog(null, "¿Confirmar accion "+accion+"?", "Confirmacion", 
+									JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "CONFIRMAR", "RECHAZAR" }, "CONFIRMAR");
 
-						if(seleccion==0){
-							dispose();
-							TCPClient.confirmarAccion(null);
+							if(seleccion==0){
+								dispose();
+								TCPClient.confirmarAccion(null);
+								JOptionPane.showMessageDialog( null, accion+" realizado correctamente", "Correcto", JOptionPane.INFORMATION_MESSAGE );
+								
+							}else{
+								dispose();
+								TCPClient.rechazarAccion();
+								
+							}
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									try {
+										VentanaListado window1 = new VentanaListado(null);
+										window1.setVisible(true);
+										dispose();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
 							
 						}else{
-							dispose();
-							TCPClient.rechazarAccion();
+							EventQueue.invokeLater(new Runnable() {
+								public void run() {
+									try {
+										VentanaConfirmar window1 = new VentanaConfirmar(parametro, accion);
+										window1.setVisible(true);
+										dispose();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
 						}
+					}else{
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								try {
@@ -162,20 +195,10 @@ public class VentanaAccion extends JFrame{
 								}
 							}
 						});
-						
-					}else{
-						EventQueue.invokeLater(new Runnable() {
-							public void run() {
-								try {
-									VentanaConfirmar window1 = new VentanaConfirmar(parametro, accion);
-									window1.setVisible(true);
-									dispose();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						});
 					}
+					
+					
+					
 					
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -202,7 +225,7 @@ public class VentanaAccion extends JFrame{
 		});
 		panel_1.add(btnVolver);
 		setResizable(false);
-		setTitle("Control de Invernadero: Login");
+		setTitle("Seleccione Accion");
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
