@@ -282,28 +282,79 @@ public class BaseDatos {
 		return url;
 	}
 	
-	public static void anyadirUsuario(String nombre, String pass) throws SQLException{
-		
+	public static boolean anyadirUsuario(String nombre, String pass) throws SQLException
+	{
+		Statement stmt = conn.createStatement();
+		String query = "INSERT INTO USUARIO VALUES ('"+nombre+"','"+pass+"')";
+		try {
+			stmt.executeUpdate(query);
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
-	public static void borrarUsuario(String nombre) throws SQLException{
-		
+	public static void borrarUsuario(String nombre) throws SQLException
+	{
+		Statement stmt = conn.createStatement();
+		String query = "DELETE FROM USUARIO WHERE nombre = '"+nombre+"'";
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public static void cambiarNombreUsuario(String nombre, String pass) throws SQLException{
-		
+	public static void cambiarNombreUsuario(String nombre) throws SQLException
+	{
+		Statement stmt = conn.createStatement();
+		String query = "UPDATE USUARIO SET nombre = '"+nombre+"' WHERE nombre='"+nombre+"'";
+		try
+		{
+			stmt.executeUpdate(query);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public static void cambiarPassUsuario(String nombre, String pass) throws SQLException{
-		
+	public static void cambiarPassUsuario(String nombre, String pass) throws SQLException
+	{
+		Statement stmt = conn.createStatement();
+		String query = "UPDATE USUARIO SET pass = '"+pass+"' WHERE nombre='"+nombre+"'";
+		try
+		{
+			stmt.executeUpdate(query);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}		
 	}
 	
-	public static void anyadirAccionAVariable(String placa, String variable, String accion) throws SQLException{
-		
+	public static boolean anyadirAccionAVariable(String variable, String accion) throws SQLException{
+		Statement stmt = conn.createStatement();
+		String query = "INSERT INTO AC_VAR VALUES ('"+accion+"','"+variable+"')";
+		try {
+			stmt.executeUpdate(query);
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
-	public static void reiniciarVariable(String placa, String variable, String accion) throws SQLException{
-		
+	public static void reiniciarVariable(String placa, String variable) throws SQLException{
+		apagarVariable(placa, variable);
+		Statement stmt = conn.createStatement();
+		String query = "UPDATE PL_VAR SET ID_ULTIMA_ACCION='"+null+"' where ID_VARIABLE='"+variable+"' AND ID_PLACA='"+placa+"'";
+		try
+		{
+			stmt.executeUpdate(query);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	
