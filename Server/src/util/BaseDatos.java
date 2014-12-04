@@ -288,9 +288,11 @@ public class BaseDatos {
 		String query = "INSERT INTO USUARIO VALUES ('"+nombre+"','"+pass+"')";
 		try {
 			stmt.executeUpdate(query);
+			stmt.close();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			stmt.close();
 			return false;
 		}
 	}
@@ -304,6 +306,7 @@ public class BaseDatos {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		stmt.close();
 	}
 	
 	public static void cambiarNombreUsuario(String nombre) throws SQLException
@@ -317,6 +320,7 @@ public class BaseDatos {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		stmt.close();
 	}
 	
 	public static void cambiarPassUsuario(String nombre, String pass) throws SQLException
@@ -329,7 +333,8 @@ public class BaseDatos {
 			
 		}catch(Exception e) {
 			e.printStackTrace();
-		}		
+		}	
+		stmt.close();
 	}
 	
 	public static boolean anyadirAccionAVariable(String variable, String accion) throws SQLException{
@@ -337,11 +342,14 @@ public class BaseDatos {
 		String query = "INSERT INTO AC_VAR VALUES ('"+accion+"','"+variable+"')";
 		try {
 			stmt.executeUpdate(query);
+			stmt.close();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			stmt.close();
 			return false;
 		}
+		
 	}
 	
 	public static void reiniciarVariable(String placa, String variable) throws SQLException{
@@ -354,9 +362,24 @@ public class BaseDatos {
 			
 		}catch(Exception e) {
 			e.printStackTrace();
-		}		
+		}	
+		stmt.close();
 	}
 	
+	public static ArrayList<String> obtenerListaUsuarios(String nombre) throws SQLException{
+		ArrayList<String>aLUsuarios=new ArrayList<String>();
+		
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select nombre from USUARIO");
+		while (rs.next()) {
+			aLUsuarios.add(rs.getString("nombre"));
+		}
+		
+		rs.close();
+		stat.close();
+			
+		return aLUsuarios; 
+	}
 	
 	
 }
