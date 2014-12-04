@@ -15,7 +15,6 @@ import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JPasswordField;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import tcpClient.TCPClient;
@@ -23,13 +22,7 @@ import tcpClient.TCPClient;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
+
 
 public class VentanaConfirmar extends JFrame{
 	private static VentanaConfirmar window;
