@@ -387,7 +387,7 @@ public class BaseDatos {
 		stat.close();
 
 		Statement stmt = conn.createStatement();
-		String query = "UPDATE PL_VAR SET ID_ULTIMA_ACCION='"+null+"' where ID_VARIABLE='"+variable+"'";
+		String query = "UPDATE PL_VAR SET ID_ULTIMA_ACCION='-' where ID_VARIABLE='"+variable+"'";
 		try
 		{
 			stmt.executeUpdate(query);

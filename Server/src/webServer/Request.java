@@ -6,18 +6,19 @@ import java.sql.SQLException;
 import java.util.*;
 
 import util.BaseDatos;
-import util.Conexiones;
 import util.SocketManager;
 
 public final class Request implements Runnable {
   final static String CRLF = "\r\n";
   SocketManager sockManager;
+  Server server;
   int estado;
   String user = null;
 
   // Constructor
-  public Request(SocketManager sockMan) {
+  public Request(SocketManager sockMan, Server server) {
     sockManager = sockMan;
+    this.server = server;
   }
 
   // Implement the run() method of the Runnable interface.
@@ -78,7 +79,7 @@ public final class Request implements Runnable {
 	    			if(BaseDatos.comprobarPass(user, pass)){
 	    				estado++;
 	    				sockManager.Escribir("201 OK Bienvenido al sistema"+ CRLF);
-	    				Conexiones.usuarios.add(user);
+	    				server.añadirUsuario(user, this);
 	    				System.out.println("Usuario añadido al Array");
 	    			}else{
 	    				sockManager.Escribir("403 ERR La clave es incorrecta"+ CRLF);
@@ -377,7 +378,13 @@ public final class Request implements Runnable {
     }
     return "application/octet-stream";
   }
-  public String getUser(){
-	  return user;
+  public void desconectarSocket(){
+	  try {
+		sockManager.CerrarStreams();
+		sockManager.CerrarSocket();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	  proceso = false;
   }
 }

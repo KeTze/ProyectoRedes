@@ -19,7 +19,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.BoxLayout;
 
-import util.Conexiones;
 import util.SocketManager;
 import webServer.Request;
 import webServer.Server;
@@ -41,6 +40,7 @@ public class VentanaConectados extends JFrame implements FocusListener {
 	private JTable table_1 ;
 	public int filaS=0;
 	private JButton btnExpulsar;
+	private Server s;
 
 	/**
 	 * Main de prueba
@@ -51,7 +51,7 @@ public class VentanaConectados extends JFrame implements FocusListener {
 
 			public void run() {
 				try {
-					VentanaConectados frame = new VentanaConectados();
+					VentanaConectados frame = new VentanaConectados(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,8 +64,8 @@ public class VentanaConectados extends JFrame implements FocusListener {
 	 * Crea la ventana tienda
 	 * @param usuario que utiliza el programa
 	 */
-	public VentanaConectados() {
-		
+	public VentanaConectados(Server server) {
+		s = server;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 386, 542);
 		contentPane_1 = new JPanel();
@@ -76,16 +76,16 @@ public class VentanaConectados extends JFrame implements FocusListener {
 		dtm = new MiModelo();
 		
 		dtm.setColumnIdentifiers(new String [] {"NOMBRE"});
-		//usuarios = Server.getUsuarios();
+		usuarios = server.getUsuarios();
 		
-		//System.out.println(Conexiones.usuarios.size());
-	//	if(Conexiones.usuarios!=null){
-		//	for(int i = 0; i<Conexiones.usuarios.size(); i++){
+		
+		if(usuarios!=null){
+			for(int i = 0; i<usuarios.size(); i++){
 				//SocketManager s = usuarios.get(i);
-		//		String s = Conexiones.usuarios.get(i);
-				dtm.addRow(new String []{Server.devolverUsuario(0)});
-		//	}
-		//}
+				String s = usuarios.get(i);
+				dtm.addRow(new String []{s});
+			}
+		}
 		
 
 
@@ -130,8 +130,13 @@ public class VentanaConectados extends JFrame implements FocusListener {
 			public void actionPerformed(ActionEvent e) {
 				int i = table_1.getSelectedRow();
 				String u = usuarios.get(i);
-				Server.desconectarUsuario(u);
+				s.desconectarUsuario(u);
 				actualizarTabla();
+				actualizarTabla();
+				actualizarTabla();
+				actualizarTabla();
+				actualizarTabla();
+				
 			}
 		});
 
@@ -161,14 +166,18 @@ public class VentanaConectados extends JFrame implements FocusListener {
 	}
 
 	public void actualizarTabla(){
-		dtm = new MiModelo();
-		
-		dtm.setColumnIdentifiers(new String [] {"NOMBRE"});
-		usuarios = Request.usuarios;
-		for(int i = 0; i<usuarios.size(); i++){
-			String s = usuarios.get(i);
-			dtm.addRow(new String []{s});
-		}
+		dispose();
+		EventQueue.invokeLater(new Runnable() {
+
+			public void run() {
+				try {
+					VentanaConectados frame = new VentanaConectados(s);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**

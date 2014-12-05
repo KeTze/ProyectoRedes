@@ -8,35 +8,41 @@ import util.*;
 public class Server
 {
 	
-	
-	
+	private int maxUsuarios;
+	private ArrayList<String>usuarios;
+	private HashMap<String, Request>sockets;
+	private boolean encendido;
+	private ServerSocket wellcomeSocket;
 	public Server() {
 		//usuariosSockets = new ArrayList<>();
-		Conexiones.iniciarlizar();
-		ejecutar();
+		maxUsuarios = 0;
+		sockets = new HashMap<>();
+		usuarios = new ArrayList<>();
+		encendido = true;
 	}
+	
 	
 	public void ejecutar(){
 
 		// Set the port number.
 		int port = 3000; //(new Integer(argv[0])).intValue();
 	
-		ServerSocket wellcomeSocket;
+		
 		System.out.println("Servidor funcionando...");
 		
 		try {
 			wellcomeSocket = new ServerSocket(port);
-			while (true)
+			while (encendido)
 			{
-				System.out.println("NumUsuarios: "+Conexiones.usuarios.size());
+				//System.out.println("NumUsuarios: "+Conexiones.usuarios.size());
 				//Socket conn = sock.accept();
 				//System.out.println(maxUsuarios);
 				
 				SocketManager sockManager = new SocketManager(wellcomeSocket.accept());
 					
-				if((Conexiones.usuarios.size()+1)<=Conexiones.maxUsuarios){
-					System.out.println("Nuevo usuario en el servidor, Anterior usuario"+Conexiones.usuarios.get(0));
-					Request request = new Request(sockManager);
+				if((usuarios.size()+1)<=maxUsuarios){
+					System.out.println("Nuevo usuario en el servidor");
+					Request request = new Request(sockManager, this);
 
 					Thread thre = new Thread(request);
 
@@ -48,6 +54,7 @@ public class Server
 				}
 				
 			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +66,33 @@ public class Server
 		new Server();
 	}
 	
-	public static String devolverUsuario(int i){
-		return Conexiones.usuarios.get(i);
+	public ArrayList<String> getUsuarios(){
+		return usuarios;
+	}
+	
+	public void desconectarUsuario(String user){
+		boolean enc = false;
+		int i=0;
+		while(!enc){
+			String s = usuarios.get(i);
+			
+			if(s.equals(user)){
+				enc = true;
+			}else{
+				i++;
+			}
+		}
+		usuarios.remove(i);
+		sockets.get("user").desconectarSocket();
+		sockets.remove(user);
+	}
+	
+	public void setMaxUsuarios(int i){
+		maxUsuarios = i;
+	}
+	
+	public void añadirUsuario(String user, Request r){
+		usuarios.add(user);
+		sockets.put(user, r);
 	}
 }

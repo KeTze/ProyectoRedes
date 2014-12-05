@@ -121,8 +121,10 @@ public class VentanaInsertarAccion extends JFrame{
 		String[] s1=  new String [lAcciones.size()];
 		for(int i = 0; i<lAcciones.size(); i++){
 			String u = lAcciones.get(i);
+			if(!u.equals("-")){
+				s1[i] = u;
+			}
 			
-			s1[i] = u;
 
 		}
 		/*

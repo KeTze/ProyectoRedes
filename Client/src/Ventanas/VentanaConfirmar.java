@@ -167,7 +167,8 @@ public class VentanaConfirmar extends JFrame{
 								btnRechazar.setEnabled(true);
 							}
 						} catch (Exception e) {
-							e.printStackTrace();
+							JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+							System.exit(0);
 						}
 					}
 				});
@@ -196,7 +197,8 @@ public class VentanaConfirmar extends JFrame{
 							});
 							dispose();
 						} catch (Exception e) {
-							e.printStackTrace();
+							JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+							System.exit(0);
 						}
 					}
 				});

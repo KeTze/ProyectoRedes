@@ -102,8 +102,8 @@ public class VentanaAccion extends JFrame{
 		try {
 			lAcciones = TCPClient.obtenerAcciones(variable);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+			System.exit(0);
 		}	
 		for (int i = 0; i < lAcciones.size()-1; i++)
 		{
@@ -200,8 +200,8 @@ public class VentanaAccion extends JFrame{
 					
 					
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+					System.exit(0);
 				}
 			}
 		});

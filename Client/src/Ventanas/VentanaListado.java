@@ -95,7 +95,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 				TCPClient.iniciarSesion("user", "pass");  //BORRAAAAAAR! ESTO ES SOLO PARA PROBAR
 				this.lVariable = TCPClient.obtenerListado();
 			} catch (IOException e1) {
-				JOptionPane.showMessageDialog( null, "Error al obtener el listado de objetos", "Error", JOptionPane.ERROR_MESSAGE );
+				JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+				System.exit(0);
 			}
 		}else{
 			this.lVariable = lVariable1;
@@ -215,7 +216,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 					}
 					actualizarTabla();
 				} catch (IOException e1) {
-					JOptionPane.showMessageDialog( null, "Error al cambiar el estado de la variable", "Error", JOptionPane.ERROR_MESSAGE );
+					JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+					System.exit(0);
 				}
 			}
 		});
@@ -311,7 +313,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 		try {
 			lVariable = TCPClient.obtenerListado();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog( null, "Error al obtener el listado de objetos", "Error", JOptionPane.ERROR_MESSAGE );
+			JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+			System.exit(0);
 		}
 		
 		for(int i = 0; i<lVariable.size(); i++){
