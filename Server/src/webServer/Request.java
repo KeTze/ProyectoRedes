@@ -227,7 +227,7 @@ public final class Request implements Runnable {
 				
 			}else if (comando.equals("SALIR")){
 				sockManager.Escribir("208 OK Adios"+ CRLF);
-        		
+        		server.desconectarUsuario(user);
         	    sockManager.CerrarStreams();
         	    sockManager.CerrarSocket();
         		proceso = false;

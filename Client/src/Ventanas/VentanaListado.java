@@ -3,6 +3,8 @@ package Ventanas;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -11,7 +13,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -30,6 +34,7 @@ import javax.swing.BoxLayout;
 import tcpClient.TCPClient;
 import tcpClient.Variable;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -91,8 +96,6 @@ public class VentanaListado extends JFrame implements FocusListener {
 		//Obtener variables
 		if(lVariable1==null){
 			try {
-				TCPClient.conectar("127.0.0.1", 3000);	//BORRAAAAAAR! ESTO ES SOLO PARA PROBAR
-				TCPClient.iniciarSesion("user", "pass");  //BORRAAAAAAR! ESTO ES SOLO PARA PROBAR
 				this.lVariable = TCPClient.obtenerListado();
 			} catch (IOException e1) {
 				JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
@@ -194,8 +197,11 @@ public class VentanaListado extends JFrame implements FocusListener {
 				int i = table_1.getSelectedRow();
 				Variable v = lVariable.get(i);
 				try {
-					TCPClient.obtenerFoto(v.getPlaca());
-					System.out.println("TERMINA");
+					boolean res = TCPClient.obtenerFoto(v.getPlaca());
+					if(res){
+						muestraImagenEnVentana();
+					}
+					
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
 					System.exit(0);
@@ -332,6 +338,54 @@ public class VentanaListado extends JFrame implements FocusListener {
 		}
 		table_1.setModel(dtm);
 	}
+	
+	public void muestraImagenEnVentana(){
+		final File f = new File("imagen.jpg");
+		final JFrame v = new JFrame();
+		
+		v.setSize(700, 500);
+		v.setResizable(false);
+		JPanel p = new JPanel();
+		
+		   ImageIcon icono = null;
+		try {
+			icono = new ImageIcon(ImageIO.read(f));
+			
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Image img = icono.getImage();
+		Image otraimg = img.getScaledInstance(700,500,java.awt.Image.SCALE_SMOOTH);
+		ImageIcon otroicon = new ImageIcon(otraimg); 
+		JLabel l = new JLabel("", otroicon, JLabel.CENTER);
+		p.setLayout(new FlowLayout());
+		v.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		v.addWindowListener(new WindowListener(){
+			public void windowActivated(WindowEvent arg0) {
+			}
+			public void windowClosed(WindowEvent arg0) {
+			}
+			public void windowClosing(WindowEvent arg0) {
+				v.dispose();
+				f.delete();
+			}
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+			public void windowIconified(WindowEvent arg0) {
+			}
+			public void windowOpened(WindowEvent arg0) {
+			}
+		});
+		v.setLocationRelativeTo(null); //para centrar la ventana en la pantalla
+		p.add(l);
+		v.getContentPane().add(p);
+		v.pack();
+		v.setVisible(true);	
+	}
+	
 	
 	
 	/**

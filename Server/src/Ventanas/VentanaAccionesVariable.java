@@ -193,7 +193,16 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 				
 				try {
 					BaseDatos.connect();
-					BaseDatos.borrarAccionVariable(variable,lAcciones.get(i));
+					String u = lAcciones.get(i);
+					String[] cortar = u.split(" ");
+					String s="";
+					for(int f=2; f<cortar.length; f++){
+						s = s + cortar[f];
+						if(f+1<cortar.length){
+							s = s+" ";
+						}
+					}
+					BaseDatos.borrarAccionVariable(variable,s);
 					BaseDatos.disconnect();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -236,6 +245,8 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 			dtm.addRow(new String []{s});
 
 		}
+		table_1.setModel(dtm);
+		
 	}
 
 

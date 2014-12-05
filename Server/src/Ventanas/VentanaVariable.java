@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.UIManager;
 
 import util.BaseDatos;
 
@@ -18,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Font;
 
 public class VentanaVariable extends JFrame {
 
@@ -26,6 +29,7 @@ public class VentanaVariable extends JFrame {
 	private JComboBox comboBox_1;
 	private ArrayList<String>lVariables;
 	private ArrayList<String>lAcciones;
+	private JLabel lblCambiado;
 
 	/**
 	 * Launch the application.
@@ -55,6 +59,8 @@ public class VentanaVariable extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		lVariables = null;
+		
+		
 		
 		comboBox_1 = new JComboBox();
 		comboBox_1.setBounds(24, 161, 372, 26);
@@ -88,14 +94,48 @@ public class VentanaVariable extends JFrame {
 				}
 				String[]s = new String [lAcciones.size()];
 				for(int i=0; i<lAcciones.size(); i++){
-					s[i] = lAcciones.get(i);
+					String u = lAcciones.get(i);
+					String[] cortar = u.split(" ");
+					String s1="";
+					for(int f=2; f<cortar.length; f++){
+						s1 = s1 + cortar[f];
+						if(f+1<cortar.length){
+							s1 = s1+" ";
+						}
+					}
+					s[i] = s1;
 				}
+				
+				
+				
 				
 				
 				comboBox_1.setModel(new DefaultComboBoxModel(s));
 				
 				
 				
+			}
+		});
+		
+		lblCambiado = new JLabel("Cambiado");
+		lblCambiado.setVisible(false);
+		lblCambiado.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCambiado.setForeground(new Color(0, 128, 0));
+		lblCambiado.setBounds(188, 138, 75, 14);
+		contentPane.add(lblCambiado);
+		
+		comboBox_1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try {
+					BaseDatos.connect();
+					BaseDatos.cambiarUltimasAcciones(lVariables.get(comboBox.getSelectedIndex()), (String)comboBox_1.getSelectedItem());
+					BaseDatos.disconnect();
+					lblCambiado.setVisible(true);
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+							
 			}
 		});
 		
@@ -166,5 +206,7 @@ public class VentanaVariable extends JFrame {
 		});
 		btnCerrar.setBounds(165, 247, 89, 23);
 		contentPane.add(btnCerrar);
+		
+		
 	}
 }

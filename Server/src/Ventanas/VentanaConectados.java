@@ -131,12 +131,7 @@ public class VentanaConectados extends JFrame implements FocusListener {
 				int i = table_1.getSelectedRow();
 				String u = usuarios.get(i);
 				s.desconectarUsuario(u);
-				actualizarTabla();
-				actualizarTabla();
-				actualizarTabla();
-				actualizarTabla();
-				actualizarTabla();
-				
+				actualizarTabla();			
 			}
 		});
 
@@ -166,18 +161,20 @@ public class VentanaConectados extends JFrame implements FocusListener {
 	}
 
 	public void actualizarTabla(){
-		dispose();
-		EventQueue.invokeLater(new Runnable() {
-
-			public void run() {
-				try {
-					VentanaConectados frame = new VentanaConectados(s);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		dtm = new MiModelo();
+		
+		dtm.setColumnIdentifiers(new String [] {"NOMBRE"});
+		usuarios = s.getUsuarios();
+		
+		
+		if(usuarios!=null){
+			for(int i = 0; i<usuarios.size(); i++){
+				//SocketManager s = usuarios.get(i);
+				String s = usuarios.get(i);
+				dtm.addRow(new String []{s});
 			}
-		});
+		}
+		table_1.setModel(dtm);
 	}
 
 	/**

@@ -24,6 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Window.Type;
 
 
 
@@ -56,6 +57,8 @@ public class VentanaServidor extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaServidor() {
+		setResizable(false);
+		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 301, 312);
 		contentPane = new JPanel();

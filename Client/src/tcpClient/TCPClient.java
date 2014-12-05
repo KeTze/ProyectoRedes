@@ -278,24 +278,27 @@ public class TCPClient {
 		}
 	}
 	
-	public static void obtenerFoto(String placa) throws IOException{
+	public static boolean obtenerFoto(String placa) throws IOException{
 		sm.Escribir("OBTENER_FOTO "+placa+'\n');
-		if(sm.Leer().startsWith("206 OK")){
+		String s = sm.Leer();
+		System.out.println(s);
+		if(s.startsWith("206 OK")){
 			InputStream im = sm.LeerArchivo();
 			DataInputStream dis = new DataInputStream(im);
 			FileOutputStream fos = new FileOutputStream("imagen.jpg");
 			byte[]buffer = new byte[1024];
 			int len;
-			while((len=im.read(buffer))>0){
-				System.out.println("ANTES");
+			while((len=dis.read(buffer))==1024){
 				fos.write(buffer, 0, len);
-				System.out.println("Buuuuuucle");
 			}
+			fos.write(buffer, 0, len);
+			fos.flush();
 			fos.close();
-		//	return 
+			return true;
 		}else if(sm.Leer().startsWith("403 ERR")){
-			//return null;
+			return false;
 		}
+		return false;
 		
 	}
 	

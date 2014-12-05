@@ -225,6 +225,7 @@ public class VentanaUsuarios extends JFrame implements FocusListener {
 			dtm.addRow(new String []{u});
 
 		}
+		table_1.setModel(dtm);
 	}
 
 

@@ -74,22 +74,7 @@ public class VentanaBuscar extends JFrame{
 		getContentPane().setBackground(Color.DARK_GRAY);
 		setResizable(false);
 		setTitle("Control de Invernadero: Buscar Variables Control");
-		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Elegir opci\u00F3n", "Por placa", "Por variable", "Por funci\u00F3n principal", "Por estado", "Por \u00FAltima acci\u00F3n"}));

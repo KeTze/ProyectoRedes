@@ -300,6 +300,12 @@ public class BaseDatos {
 		stat.close();
 	}
 	
+	public static void cambiarUltimasAcciones(String variable, String accion) throws SQLException{
+		Statement stat = conn.createStatement();
+		stat.executeUpdate("UPDATE PL_VAR SET ID_ULTIMA_ACCION='"+accion+"' where ID_VARIABLE='"+variable+"'");
+		stat.close();
+	}
+	
 	public static String obtenerFoto(String placa) throws SQLException{
 		Statement stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("select FOTO from PLACA where ID='"+placa+"'");
