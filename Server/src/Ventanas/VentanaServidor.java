@@ -18,6 +18,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import util.Conexiones;
 import webServer.Server;
 
 import java.beans.PropertyChangeListener;
@@ -71,7 +72,8 @@ public class VentanaServidor extends JFrame {
 		spinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
-				Server.setMaxUsuarios((int) spinner.getValue());
+				Conexiones.maxUsuarios = ((int) spinner.getValue());
+				System.out.println(Conexiones.maxUsuarios);
 			}
 		});
 		

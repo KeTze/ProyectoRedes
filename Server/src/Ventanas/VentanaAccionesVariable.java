@@ -23,6 +23,7 @@ import javax.swing.BoxLayout;
 
 
 
+
 import util.BaseDatos;
 
 
@@ -39,6 +40,7 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 	public int filaS=0;
 	private JButton btnBorrar;
 	private JButton btnAnyadir;
+	private String variable;
 
 	/**
 	 * Main de prueba
@@ -59,8 +61,8 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 	}
 
 
-	public VentanaAccionesVariable(String variable) {
-		
+	public VentanaAccionesVariable(final String variable) {
+		this.variable = variable;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 386, 542);
 		contentPane_1 = new JPanel();
@@ -86,8 +88,15 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 
 		for(int i = 0; i<lAcciones.size(); i++){
 			String u = lAcciones.get(i);
-			String split = 
-			dtm.addRow(new String []{u});
+			String[] cortar = u.split(" ");
+			String s="";
+			for(int f=2; f<cortar.length; f++){
+				s = s + cortar[f];
+				if(f+1<cortar.length){
+					s = s+" ";
+				}
+			}
+			dtm.addRow(new String []{s});
 
 		}
 		/*
@@ -111,6 +120,16 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dispose();
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							VentanaVariable frame = new VentanaVariable();
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 
@@ -151,7 +170,7 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 					public void run() {
 						
 						try {
-							VentanaAnyadirUsuario window = new VentanaAnyadirUsuario();
+							VentanaInsertarAccion window = new VentanaInsertarAccion(variable);
 							window.setVisible(true);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -174,7 +193,7 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 				
 				try {
 					BaseDatos.connect();
-					BaseDatos.borraryyUsuario(lAcciones.get(i));
+					BaseDatos.borrarAccionVariable(variable,lAcciones.get(i));
 					BaseDatos.disconnect();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -193,19 +212,28 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 	public void actualizar(){
 		try {
 			BaseDatos.connect();
-			lAcciones = BaseDatos.gtfobtenerListaUsuarios();
+			lAcciones = BaseDatos.obtenerListaAcciones(variable);
 			BaseDatos.disconnect();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
 		dtm = new MiModelo();
 		
 		dtm.setColumnIdentifiers(new String [] {"NOMBRE"});
 
 		for(int i = 0; i<lAcciones.size(); i++){
 			String u = lAcciones.get(i);
-			dtm.addRow(new String []{u});
+			String[] cortar = u.split(" ");
+			String s="";
+			for(int f=2; f<cortar.length; f++){
+				s = s + cortar[f];
+				if(f+1<cortar.length){
+					s = s+" ";
+				}
+			}
+			dtm.addRow(new String []{s});
 
 		}
 	}

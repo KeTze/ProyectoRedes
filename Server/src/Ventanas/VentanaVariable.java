@@ -48,7 +48,7 @@ public class VentanaVariable extends JFrame {
 	 */
 	public VentanaVariable() {
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 439, 317);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -108,6 +108,21 @@ public class VentanaVariable extends JFrame {
 		contentPane.add(separator);
 		
 		JButton btnEditarAcciones = new JButton("EDITAR ACCIONES");
+		btnEditarAcciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							VentanaAccionesVariable frame = new VentanaAccionesVariable(lVariables.get(comboBox.getSelectedIndex()));
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		});
 		btnEditarAcciones.setBounds(24, 90, 372, 23);
 		contentPane.add(btnEditarAcciones);
 		

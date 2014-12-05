@@ -8,7 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaAdministrador extends JFrame {
 
@@ -34,8 +37,8 @@ public class VentanaAdministrador extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaAdministrador() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 463);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 312);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
@@ -52,17 +55,50 @@ public class VentanaAdministrador extends JFrame {
 		panelCentral.setLayout(new BorderLayout(0, 0));
 		
 		JButton btnSalir = new JButton("SALIR");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		panelCentral.add(btnSalir, BorderLayout.SOUTH);
 		
 		JPanel panelBotonesCentral = new JPanel();
 		panelCentral.add(panelBotonesCentral, BorderLayout.CENTER);
 		panelBotonesCentral.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JButton btnNewButton = new JButton("New button");
-		panelBotonesCentral.add(btnNewButton);
+		JButton btnUsuarios = new JButton("GESTIONAR USUARIOS");
+		btnUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							VentanaUsuarios frame = new VentanaUsuarios();
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		});
+		panelBotonesCentral.add(btnUsuarios);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		panelBotonesCentral.add(btnNewButton_1);
+		JButton btnVariable = new JButton("GESTIONAR VARIABLES");
+		btnVariable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							VentanaVariable frame = new VentanaVariable();
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		});
+		panelBotonesCentral.add(btnVariable);
 	}
 
 }

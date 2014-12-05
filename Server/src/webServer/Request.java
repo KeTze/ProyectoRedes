@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import util.BaseDatos;
+import util.Conexiones;
 import util.SocketManager;
 
 public final class Request implements Runnable {
@@ -77,8 +78,8 @@ public final class Request implements Runnable {
 	    			if(BaseDatos.comprobarPass(user, pass)){
 	    				estado++;
 	    				sockManager.Escribir("201 OK Bienvenido al sistema"+ CRLF);
-	    				Server.añadirUsuario(user);
-	    				//Server.añadirUsuario(user, sockManager);
+	    				Conexiones.usuarios.add(user);
+	    				System.out.println("Usuario añadido al Array");
 	    			}else{
 	    				sockManager.Escribir("403 ERR La clave es incorrecta"+ CRLF);
 	    				//estado--;

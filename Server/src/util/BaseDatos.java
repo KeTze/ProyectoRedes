@@ -189,6 +189,35 @@ public class BaseDatos {
 		return aLAcciones; 
 	}
 	
+	public static ArrayList<String> obtenerAcciones() throws SQLException{
+		ArrayList<String>aLAcciones=new ArrayList<String>();
+		
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select A.ID_ACCION from ACCION A");
+		while (rs.next()) {	
+			String s = rs.getString("ID_ACCION");
+			aLAcciones.add(s);
+		}
+		
+		rs.close();
+		stat.close();
+			
+		return aLAcciones; 
+	}
+	
+	public static void borrarAccionVariable(String variable, String accion) throws SQLException
+	{
+		Statement stmt = conn.createStatement();
+		String query = "DELETE FROM AC_VAR WHERE ID_ACCION = '"+accion+"' AND ID_VARIABLE = '"+variable+"'";
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		stmt.close();
+	}
+	
+	
 	public static void main(String[]args){
 		try {
 			BaseDatos.connect();
@@ -345,7 +374,6 @@ public class BaseDatos {
 			stmt.close();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			stmt.close();
 			return false;
 		}

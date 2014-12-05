@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.BoxLayout;
 
+import util.Conexiones;
 import util.SocketManager;
 import webServer.Request;
 import webServer.Server;
@@ -76,16 +77,15 @@ public class VentanaConectados extends JFrame implements FocusListener {
 		
 		dtm.setColumnIdentifiers(new String [] {"NOMBRE"});
 		//usuarios = Server.getUsuarios();
-		usuarios = Server.getUsuarios();
-		System.out.println(usuarios.size());
-		if(usuarios!=null){
-			for(int i = 0; i<usuarios.size(); i++){
+		
+		//System.out.println(Conexiones.usuarios.size());
+	//	if(Conexiones.usuarios!=null){
+		//	for(int i = 0; i<Conexiones.usuarios.size(); i++){
 				//SocketManager s = usuarios.get(i);
-				String s = usuarios.get(i);
-				dtm.addRow(new String []{s});
-				System.out.println(s);
-			}
-		}
+		//		String s = Conexiones.usuarios.get(i);
+				dtm.addRow(new String []{Server.devolverUsuario(0)});
+		//	}
+		//}
 		
 
 

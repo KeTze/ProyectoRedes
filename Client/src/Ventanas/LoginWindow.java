@@ -239,6 +239,12 @@ public class LoginWindow extends JFrame{
 									JOptionPane.showMessageDialog( null, "La clave de usuario que ha introducido es incorrecta", "Error", JOptionPane.ERROR_MESSAGE );
 									btnLogin.setEnabled(true);
 									btnLogin.setText("Iniciar Sesión");
+								}else if(resultado.equals("MAX_USERS")){
+									TCPClient.desconectar();
+									passwordField.setBackground(Color.RED);
+									JOptionPane.showMessageDialog( null, "El servidor ha alcanzado el numero maximo de usuarios. Intentalo mas tarde", "Error", JOptionPane.ERROR_MESSAGE );
+									btnLogin.setEnabled(true);
+									btnLogin.setText("Iniciar Sesión");
 								}
 							} catch (IOException e) {
 								txtServidor.setBackground(Color.RED);

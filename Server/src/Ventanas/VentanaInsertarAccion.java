@@ -27,16 +27,23 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class VentanaInsertarAccion extends JFrame{
 	
 	private JButton btnAnyadir;
+	private String variable;
+	private JComboBox comboBox;
 	private static VentanaInsertarAccion window;
+	private ArrayList<String> lAcciones= new ArrayList();
 	/**
 	 * Launch the application.
 	 */
@@ -44,7 +51,7 @@ public class VentanaInsertarAccion extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window = new VentanaInsertarAccion();
+					window = new VentanaInsertarAccion("Temperatura");
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,8 +63,9 @@ public class VentanaInsertarAccion extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public VentanaInsertarAccion() {
+	public VentanaInsertarAccion(String variable) {
 		super();
+		this.variable = variable;
 		initialize();
 	}
 
@@ -65,12 +73,16 @@ public class VentanaInsertarAccion extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		setBounds(100, 100, 324, 171);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
 		setResizable(false);
 		setTitle("Invernadero");
+		
+		
+		
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -98,8 +110,42 @@ public class VentanaInsertarAccion extends JFrame{
 		btnAnyadir.setForeground(Color.BLACK);
 		btnAnyadir.setOpaque(false);
 		btnAnyadir.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		try {
+			BaseDatos.connect();
+			lAcciones = BaseDatos.obtenerAcciones();
+			BaseDatos.disconnect();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String[] s1=  new String [lAcciones.size()];
+		for(int i = 0; i<lAcciones.size(); i++){
+			String u = lAcciones.get(i);
+			
+			s1[i] = u;
+
+		}
+		/*
+		 * for(int i = 0; i<lAcciones.size(); i++){
+		String u = lAcciones.get(i);
+		boolean repetido = false;
+		for(int j = 0; j<i; i++){
+			String s = (String) dtm.getValueAt(j, 0);
+			if(s.equals(u)){
+				repetido = true;
+			}
+
+		}
+		if(!repetido){
+			dtm.addRow(new String []{u});
+
+	}
+		 */
 		
-		JComboBox comboBox = new JComboBox();
+		
+		comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(s1));
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -128,13 +174,65 @@ public class VentanaInsertarAccion extends JFrame{
 		
 		setLocationRelativeTo(null);
 		
+		addWindowListener(new WindowListener(){
+			public void windowActivated(WindowEvent arg0) {
+			}
+			public void windowClosed(WindowEvent arg0) {
+			}
+			public void windowClosing(WindowEvent arg0) {
+				dispose();
+				EventQueue.invokeLater(new Runnable() {
+
+					public void run() {
+						try {
+							VentanaAccionesVariable frame = new VentanaAccionesVariable(variable);
+							frame.setVisible(true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+			public void windowIconified(WindowEvent arg0) {
+			}
+			public void windowOpened(WindowEvent arg0) {
+			}
+		});
+		
 		eventos();
 	}
 	
 	private void eventos() {
 		btnAnyadir.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				
+				int i = comboBox.getSelectedIndex();
+				try {
+					BaseDatos.connect();
+					boolean res = BaseDatos.anyadirAccionAVariable(variable, lAcciones.get(i));
+					BaseDatos.disconnect();
+					if(res){
+						dispose();
+						EventQueue.invokeLater(new Runnable() {
+
+							public void run() {
+								try {
+									VentanaAccionesVariable frame = new VentanaAccionesVariable(variable);
+									frame.setVisible(true);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					}else{
+						JOptionPane.showMessageDialog( null, "La variable ya contiene esa accion. Elige otra", "Error", JOptionPane.ERROR_MESSAGE );
+					}
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog( null, "La variable ya contiene esa accion. Elige otra", "Error", JOptionPane.ERROR_MESSAGE );
+				}
 				
 				
 			}
@@ -143,6 +241,8 @@ public class VentanaInsertarAccion extends JFrame{
 		
 	
 	}
+	
+	
 	
 	private JFrame getFrame(){
 		return this;

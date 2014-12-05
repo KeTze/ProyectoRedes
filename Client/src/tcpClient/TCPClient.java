@@ -38,16 +38,21 @@ public class TCPClient {
 	 * @throws IOException
 	 */
 	public static String iniciarSesion(String nombre, String pass) throws IOException{
-		sm.Escribir("USER "+nombre+'\n');
-		String s = sm.Leer();
-		System.out.println(s);
-		if(s.charAt(0)=='4'){	//Si ha habido error en el USER devuelve el error
-			return s;
-		}else{
-			sm.Escribir("PASS "+pass+'\n');
-			String s2 = sm.Leer();
-			System.out.println(s2);
-			return s2;
+		try{
+			sm.Escribir("USER "+nombre+'\n');
+			String s = sm.Leer();
+			System.out.println(s);
+			if(s.charAt(0)=='4'){	//Si ha habido error en el USER devuelve el error
+				return s;
+			}else{
+				sm.Escribir("PASS "+pass+'\n');
+				String s2 = sm.Leer();
+				System.out.println(s2);
+				return s2;
+			}
+		}catch(NullPointerException e){
+			
+			return "MAX_USERS";
 		}
 		
 	}
