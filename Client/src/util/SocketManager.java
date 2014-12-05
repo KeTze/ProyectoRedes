@@ -84,4 +84,8 @@ public class SocketManager {
     public void Escribir(byte[] buffer, int bytes) throws IOException {
         bufferEscritura.write(buffer, 0, bytes);
     }
+    
+    public InputStream LeerArchivo() throws IOException{
+    	return mySocket.getInputStream();
+    }
 }

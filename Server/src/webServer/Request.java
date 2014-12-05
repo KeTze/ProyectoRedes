@@ -219,7 +219,7 @@ public final class Request implements Runnable {
 					}else{
 						File f = new File(url);
 						sockManager.Escribir("206 OK "+f.length()+" bytes transmitiendo"+CRLF);
-						FileInputStream fis = new FileInputStream(url);
+						FileInputStream fis = new FileInputStream(f.getAbsolutePath());
 						sendBytes(fis);
 					}
 					

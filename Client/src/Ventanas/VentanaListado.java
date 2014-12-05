@@ -191,7 +191,15 @@ public class VentanaListado extends JFrame implements FocusListener {
 		panel.add(btnObtenerFoto);
 		btnObtenerFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//OBTENER FOTO**********************************************************************************
+				int i = table_1.getSelectedRow();
+				Variable v = lVariable.get(i);
+				try {
+					TCPClient.obtenerFoto(v.getPlaca());
+					System.out.println("TERMINA");
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+					System.exit(0);
+				}
 			}
 		});
 
@@ -358,7 +366,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 					try {
 						lVariable = TCPClient.obtenerBusqueda("placa", txtBusqueda.getText());
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog( null, "Error al realizar la busqueda", "Error", JOptionPane.ERROR_MESSAGE );
+						JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+						System.exit(0);
 					}
 						
 				}
@@ -368,7 +377,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 					try {
 						lVariable = TCPClient.obtenerBusqueda("variable", txtBusqueda.getText());
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog( null, "Error al realizar la busqueda", "Error", JOptionPane.ERROR_MESSAGE );
+						JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+						System.exit(0);
 					}
 					
 				}
@@ -378,7 +388,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 					try {
 						lVariable = TCPClient.obtenerBusqueda("funcion_principal", txtBusqueda.getText());
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog( null, "Error al realizar la busqueda", "Error", JOptionPane.ERROR_MESSAGE );
+						JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+						System.exit(0);
 					}
 					
 				}
@@ -390,7 +401,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 					try {
 						lVariable = TCPClient.obtenerBusqueda("estado", txtBusqueda.getText());
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog( null, "Error al realizar la busqueda", "Error", JOptionPane.ERROR_MESSAGE );
+						JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+						System.exit(0);
 					}
 					
 				}
@@ -400,7 +412,8 @@ public class VentanaListado extends JFrame implements FocusListener {
 					try {
 						lVariable = TCPClient.obtenerBusqueda("ultima_accion", txtBusqueda.getText());
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog( null, "Error al realizar la busqueda", "Error", JOptionPane.ERROR_MESSAGE );
+						JOptionPane.showMessageDialog( null, "Has sido desconectado del servidor. Hasta otra!", "Error", JOptionPane.ERROR_MESSAGE );
+						System.exit(0);
 					}
 				}
 				if(lVariable.size()==0){

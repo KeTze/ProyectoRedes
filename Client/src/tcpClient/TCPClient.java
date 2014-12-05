@@ -278,8 +278,25 @@ public class TCPClient {
 		}
 	}
 	
-	public static void obtenerFoto(String placa){
-		paqpete;
+	public static void obtenerFoto(String placa) throws IOException{
+		sm.Escribir("OBTENER_FOTO "+placa+'\n');
+		if(sm.Leer().startsWith("206 OK")){
+			InputStream im = sm.LeerArchivo();
+			DataInputStream dis = new DataInputStream(im);
+			FileOutputStream fos = new FileOutputStream("imagen.jpg");
+			byte[]buffer = new byte[1024];
+			int len;
+			while((len=im.read(buffer))>0){
+				System.out.println("ANTES");
+				fos.write(buffer, 0, len);
+				System.out.println("Buuuuuucle");
+			}
+			fos.close();
+		//	return 
+		}else if(sm.Leer().startsWith("403 ERR")){
+			//return null;
+		}
+		
 	}
 	
 	/**Cierra la conexion con el servidor
