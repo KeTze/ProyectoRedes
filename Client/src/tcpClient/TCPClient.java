@@ -46,7 +46,7 @@ public class TCPClient {
 		}else{
 			sm.Escribir("PASS "+pass+'\n');
 			String s2 = sm.Leer();
-			//System.out.println(s2);
+			System.out.println(s2);
 			return s2;
 		}
 		

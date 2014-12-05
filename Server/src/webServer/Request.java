@@ -8,9 +8,7 @@ import java.util.*;
 import util.BaseDatos;
 import util.SocketManager;
 
-final class Request implements Runnable {
-
- 
+public final class Request implements Runnable {
   final static String CRLF = "\r\n";
   SocketManager sockManager;
   int estado;
@@ -36,11 +34,12 @@ final class Request implements Runnable {
   private String id_placa;	
   private String accion;
   private boolean parametro;
+  private static boolean proceso;
   
   
   private void processRequest() throws Exception{
     // Get the request line of the HTTP request message.
-	  boolean proceso = true;
+	 proceso = true;
    while (proceso){
 	   System.out.println("Estado"+estado);
 	   String requestLine = sockManager.Leer();
@@ -78,6 +77,8 @@ final class Request implements Runnable {
 	    			if(BaseDatos.comprobarPass(user, pass)){
 	    				estado++;
 	    				sockManager.Escribir("201 OK Bienvenido al sistema"+ CRLF);
+	    				Server.añadirUsuario(user);
+	    				//Server.añadirUsuario(user, sockManager);
 	    			}else{
 	    				sockManager.Escribir("403 ERR La clave es incorrecta"+ CRLF);
 	    				//estado--;
@@ -374,5 +375,8 @@ final class Request implements Runnable {
       return "audio/x-pn-realaudio";
     }
     return "application/octet-stream";
+  }
+  public String getUser(){
+	  return user;
   }
 }

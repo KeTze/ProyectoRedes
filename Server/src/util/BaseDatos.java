@@ -352,10 +352,14 @@ public class BaseDatos {
 		
 	}
 	
-	public static void reiniciarVariable(String placa, String variable) throws SQLException{
-		apagarVariable(placa, variable);
+	public static void reiniciarVariable(String variable) throws SQLException{
+
+		Statement stat = conn.createStatement();
+		stat.executeUpdate("UPDATE PL_VAR SET ESTADO=0 where ID_VARIABLE='"+variable+"'");
+		stat.close();
+
 		Statement stmt = conn.createStatement();
-		String query = "UPDATE PL_VAR SET ID_ULTIMA_ACCION='"+null+"' where ID_VARIABLE='"+variable+"' AND ID_PLACA='"+placa+"'";
+		String query = "UPDATE PL_VAR SET ID_ULTIMA_ACCION='"+null+"' where ID_VARIABLE='"+variable+"'";
 		try
 		{
 			stmt.executeUpdate(query);
@@ -366,7 +370,7 @@ public class BaseDatos {
 		stmt.close();
 	}
 	
-	public static ArrayList<String> obtenerListaUsuarios(String nombre) throws SQLException{
+	public static ArrayList<String> obtenerListaUsuarios() throws SQLException{
 		ArrayList<String>aLUsuarios=new ArrayList<String>();
 		
 		Statement stat = conn.createStatement();
@@ -379,6 +383,21 @@ public class BaseDatos {
 		stat.close();
 			
 		return aLUsuarios; 
+	}
+	
+	public static ArrayList<String> obtenerListaVariables() throws SQLException{
+		ArrayList<String>aLVariables=new ArrayList<String>();
+		
+		Statement stat = conn.createStatement();
+		ResultSet rs = stat.executeQuery("select ID_VARIABLE from VARIABLE");
+		while (rs.next()) {
+			aLVariables.add(rs.getString("ID_VARIABLE"));
+		}
+		
+		rs.close();
+		stat.close();
+			
+		return aLVariables; 
 	}
 	
 	

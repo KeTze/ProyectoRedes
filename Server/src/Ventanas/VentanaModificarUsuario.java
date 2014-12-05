@@ -18,7 +18,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPasswordField;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import tcpClient.TCPClient;
+import util.BaseDatos;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -29,15 +29,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class LoginWindow extends JFrame{
+public class VentanaModificarUsuario extends JFrame{
 	
-	private JButton btnLogin;
+	private JButton btnActualizar;
 	private JPasswordField passwordField;
 	private JTextField txtUsername;
-	private JTextField txtServidor;
-	private static LoginWindow window;
+	private static VentanaModificarUsuario window;
+	private String user;
 	/**
 	 * Launch the application.
 	 */
@@ -45,7 +46,7 @@ public class LoginWindow extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window = new LoginWindow();
+					window = new VentanaModificarUsuario("user");
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,8 +58,9 @@ public class LoginWindow extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public LoginWindow() {
+	public VentanaModificarUsuario(String user) {
 		super();
+		this.user = user;
 		initialize();
 	}
 
@@ -66,12 +68,12 @@ public class LoginWindow extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setBounds(100, 100, 324, 253);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 324, 214);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		getContentPane().setBackground(Color.DARK_GRAY);
 		setResizable(false);
-		setTitle("Control de Invernadero: Login");
+		setTitle("Invernadero");
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -89,16 +91,16 @@ public class LoginWindow extends JFrame{
 			e.printStackTrace();
 		}
 		
-		JLabel lblLogin = new JLabel("Login");
+		JLabel lblLogin = new JLabel("Actualizar usuario");
 		lblLogin.setForeground(Color.WHITE);
 		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		btnLogin = new JButton("Iniciar Sesión");
-		btnLogin.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.0f));
-		btnLogin.setForeground(Color.BLACK);
-		btnLogin.setOpaque(false);
-		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnActualizar = new JButton("ACTUALIZAR");
+		btnActualizar.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.0f));
+		btnActualizar.setForeground(Color.BLACK);
+		btnActualizar.setOpaque(false);
+		btnActualizar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -106,7 +108,8 @@ public class LoginWindow extends JFrame{
 		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
 		passwordField.setToolTipText("password");
 		
-		txtUsername = new JTextField();
+		txtUsername = new JTextField(user);
+		txtUsername.setEditable(false);
 		txtUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtUsername.setHorizontalAlignment(SwingConstants.CENTER);
 		txtUsername.setToolTipText("username");
@@ -117,15 +120,6 @@ public class LoginWindow extends JFrame{
 		
 		JLabel lblPass = new JLabel("Pass:");
 		lblPass.setForeground(Color.WHITE);
-		
-		txtServidor = new JTextField();
-		txtServidor.setToolTipText("username");
-		txtServidor.setHorizontalAlignment(SwingConstants.CENTER);
-		txtServidor.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtServidor.setColumns(10);
-		
-		JLabel lblServidor = new JLabel("IPServer:");
-		lblServidor.setForeground(Color.WHITE);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -134,22 +128,17 @@ public class LoginWindow extends JFrame{
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblLogin, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblServidor, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtServidor, GroupLayout.PREFERRED_SIZE, 242, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblPass)
-							.addGap(31)
+							.addGap(30)
 							.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-							.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnLogin, GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
 							.addContainerGap())
 						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 							.addComponent(lblUser, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtUsername, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+							.addContainerGap())
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnActualizar, GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
 							.addContainerGap())))
 		);
 		groupLayout.setVerticalGroup(
@@ -157,20 +146,16 @@ public class LoginWindow extends JFrame{
 				.addGroup(groupLayout.createSequentialGroup()
 					.addComponent(lblLogin, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(txtServidor, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblServidor, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblUser, GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(12)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblPass))
-					.addGap(19)
-					.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addGap(18)
+					.addComponent(btnActualizar, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+					.addGap(54))
 		);
 		getContentPane().setLayout(groupLayout);
 		
@@ -182,78 +167,54 @@ public class LoginWindow extends JFrame{
 		
 	}
 	private void eventos() {
-		btnLogin.addActionListener(new ActionListener(){
+		btnActualizar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				btnLogin.setText("CONECTANDO...");
-				btnLogin.setEnabled(false);
+				btnActualizar.setText("ACTUALIZANDO...");
+				btnActualizar.setEnabled(false);
 				
-				txtServidor.setBackground(Color.WHITE);
 				txtUsername.setBackground(Color.WHITE);
 				passwordField.setBackground(Color.WHITE);
-				if(txtServidor.getText().equals("")){
-					txtServidor.setBackground(Color.YELLOW);
-					btnLogin.setEnabled(true);
-					btnLogin.setText("Iniciar Sesión");
-				}else{
+				boolean fallo = false;
+				if(txtUsername.getText().equals("")){
+					txtUsername.setBackground(Color.YELLOW);
+					fallo = true;
+				}
+				if(passwordField.getText().equals("")){
+					passwordField.setBackground(Color.YELLOW);
+					fallo = true;
+				}
+				if(!fallo){
+					boolean res = false;
+					try {
+						BaseDatos.connect();
+						BaseDatos.cambiarPassUsuario(user, passwordField.getText());
+						BaseDatos.disconnect();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
-					Thread t = new Thread(new Runnable(){
+					
+					dispose();
+					
+					EventQueue.invokeLater(new Runnable() {
 						public void run() {
 							try {
-								
-								TCPClient.conectar(txtServidor.getText(), 3000);
-								String resultado = TCPClient.iniciarSesion(txtUsername.getText(), passwordField.getText());
-								System.out.println(resultado);
-								if(resultado.substring(0, 3).equals("201")){
-									EventQueue.invokeLater(new Runnable() {
-										public void run() {
-											try {
-												VentanaBuscar window1 = new VentanaBuscar();
-												window1.setVisible(true);
-											} catch (Exception e) {
-												e.printStackTrace();
-											}
-										}
-									});
-									dispose();
-								}else if(resultado.substring(0, 3).equals("400")){
-									TCPClient.desconectar();
-									txtUsername.setBackground(Color.YELLOW);
-									JOptionPane.showMessageDialog( null, "Falta el nombre de usuario", "Error", JOptionPane.ERROR_MESSAGE );
-									btnLogin.setEnabled(true);
-									btnLogin.setText("Iniciar Sesión");
-								}else if(resultado.substring(0, 3).equals("401")){
-									TCPClient.desconectar();
-									txtUsername.setBackground(Color.RED);
-									JOptionPane.showMessageDialog( null, "Usuario no registrado. Intentelo de nuevo", "Error", JOptionPane.ERROR_MESSAGE );
-									btnLogin.setEnabled(true);
-									btnLogin.setText("Iniciar Sesión");
-								}else if(resultado.substring(0, 3).equals("402")){
-									TCPClient.desconectar();
-									passwordField.setBackground(Color.YELLOW);
-									JOptionPane.showMessageDialog( null, "Falta la clave de usuario", "Error", JOptionPane.ERROR_MESSAGE );
-									btnLogin.setEnabled(true);
-									btnLogin.setText("Iniciar Sesión");
-								}else if(resultado.substring(0, 3).equals("403")){
-									TCPClient.desconectar();
-									passwordField.setBackground(Color.RED);
-									JOptionPane.showMessageDialog( null, "La clave de usuario que ha introducido es incorrecta", "Error", JOptionPane.ERROR_MESSAGE );
-									btnLogin.setEnabled(true);
-									btnLogin.setText("Iniciar Sesión");
-								}
-							} catch (IOException e) {
-								txtServidor.setBackground(Color.RED);
-								JOptionPane.showMessageDialog( null, "La IP del Servidor que ha introducido es incorrecta o el servidor no acepta mas conexiones", "Error", JOptionPane.ERROR_MESSAGE );
-								btnLogin.setEnabled(true);
-								btnLogin.setText("Iniciar Sesión");
+								VentanaUsuarios window1 = new VentanaUsuarios();
+								window1.setVisible(true);
+							} catch (Exception e) {
+								e.printStackTrace();
 							}
 						}
 					});
-					t.start();
-					
 				}
+				
+				btnActualizar.setText("ACTUALIZAR");
+				btnActualizar.setEnabled(true);
 				
 				
 			}
+			
 		});
 		
 	
