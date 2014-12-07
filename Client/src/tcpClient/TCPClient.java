@@ -6,18 +6,7 @@ import java.io.*;
 
 import javax.swing.JOptionPane;
 
-/**
- * <p>Title: practica1</p>
- *
- * <p>Description: Introduccion a los sockets</p>
- *
- * <p>Copyright: Copyright (c) 2005</p>
- *
- * <p>Company: ESIDE</p>
- *
- * @author Susana Pérez
- * @version 1.0
- */
+
 public class TCPClient {
 	private static SocketManager sm;
 	public static void conectar(String ip, int puerto) throws IOException{
@@ -283,7 +272,7 @@ public class TCPClient {
 		String s = sm.Leer();
 		System.out.println(s);
 		if(s.startsWith("206 OK")){
-			InputStream im = sm.LeerArchivo();
+			InputStream im = sm.getInputStream();
 			DataInputStream dis = new DataInputStream(im);
 			FileOutputStream fos = new FileOutputStream("imagen.jpg");
 			byte[]buffer = new byte[1024];

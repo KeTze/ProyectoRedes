@@ -2,19 +2,6 @@ package util;
 import java.net.*;
 import java.io.*;
 
-/**
- *
- * <p>Title: Practica 2 WebServer</p>
- *
- * <p>Description: Hace transparente la funcionalidad básica de la clase Socket</p>
- *
- * <p>Copyright: Copyright (c) 2005</p>
- *
- * <p>Company: ESIDE</p>
- *
- * @author Unai Hernandez Jayo & Cia
- * @version 1.0
- */
 
 public class SocketManager {
     private Socket mySocket;

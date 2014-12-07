@@ -178,9 +178,7 @@ public class LoginWindow extends JFrame{
 		
 		eventos();
 	}
-	private void desactivarBotones(){
-		
-	}
+
 	private void eventos() {
 		btnLogin.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {

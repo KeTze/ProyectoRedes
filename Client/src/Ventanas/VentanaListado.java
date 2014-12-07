@@ -79,10 +79,7 @@ public class VentanaListado extends JFrame implements FocusListener {
 		});
 	}
 
-	/**
-	 * Crea la ventana tienda
-	 * @param usuario que utiliza el programa
-	 */
+
 	public VentanaListado(ArrayList<Variable> lVariable1) {
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -387,11 +384,6 @@ public class VentanaListado extends JFrame implements FocusListener {
 	}
 	
 	
-	
-	/**
-	 * Metodo para buscar un libro dentro de la tabla.
-	 * Puede ser por medio de varios atributos
-	 */
 	public void buscar(){
 		btnBuscar.setEnabled(false);
 		dtm = new MiModelo();

@@ -92,9 +92,6 @@ public class VentanaAccion extends JFrame{
 		panel.setBackground(Color.DARK_GRAY);
 		getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		
-		
-		//2 ArrayList. Uno con las acciones y otro con los JRadioButtons.
 				
 		ArrayList<String> lAcciones = new ArrayList<>();
 		lButtons = new ArrayList<>();
@@ -113,13 +110,6 @@ public class VentanaAccion extends JFrame{
 			bg.add(lButtons.get(i));
 			panel.add(lButtons.get(i));
 		}
-		
-		/*
-		JRadioButton rdbtnHhh = new JRadioButton("hhh");
-		rdbtnHhh.setBackground(Color.DARK_GRAY);
-		rdbtnHhh.setForeground(Color.WHITE);
-		panel.add(rdbtnHhh);
-		*/
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.DARK_GRAY);
@@ -243,16 +233,8 @@ public class VentanaAccion extends JFrame{
 		}
 		
 		setLocationRelativeTo(null);
-		
-		eventos();
 	}
-	private void desactivarBotones(){
-		
-	}
-	private void eventos() {
-		
-	
-	}
+
 	
 	private JFrame getFrame(){
 		return this;

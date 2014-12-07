@@ -160,9 +160,7 @@ public class VentanaAnyadirUsuario extends JFrame{
 		
 		eventos();
 	}
-	private void desactivarBotones(){
-		
-	}
+
 	private void eventos() {
 		btnAnyadir.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {

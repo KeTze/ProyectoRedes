@@ -127,23 +127,6 @@ public class VentanaInsertarAccion extends JFrame{
 			
 
 		}
-		/*
-		 * for(int i = 0; i<lAcciones.size(); i++){
-		String u = lAcciones.get(i);
-		boolean repetido = false;
-		for(int j = 0; j<i; i++){
-			String s = (String) dtm.getValueAt(j, 0);
-			if(s.equals(u)){
-				repetido = true;
-			}
-
-		}
-		if(!repetido){
-			dtm.addRow(new String []{u});
-
-	}
-		 */
-		
 		
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(s1));

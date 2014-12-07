@@ -215,14 +215,6 @@ public class VentanaBuscar extends JFrame{
 		
 		setLocationRelativeTo(null);
 		
-		eventos();
-	}
-	private void desactivarBotones(){
-		
-	}
-	private void eventos() {
-		
-	
 	}
 	
 	private JFrame getFrame(){

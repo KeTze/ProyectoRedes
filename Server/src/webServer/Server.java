@@ -14,7 +14,6 @@ public class Server
 	private boolean encendido;
 	private ServerSocket wellcomeSocket;
 	public Server() {
-		//usuariosSockets = new ArrayList<>();
 		maxUsuarios = 0;
 		sockets = new HashMap<>();
 		usuarios = new ArrayList<>();
@@ -34,9 +33,6 @@ public class Server
 			wellcomeSocket = new ServerSocket(port);
 			while (encendido)
 			{
-				//System.out.println("NumUsuarios: "+Conexiones.usuarios.size());
-				//Socket conn = sock.accept();
-				//System.out.println(maxUsuarios);
 				
 				SocketManager sockManager = new SocketManager(wellcomeSocket.accept());
 					

@@ -99,22 +99,6 @@ public class VentanaAccionesVariable extends JFrame implements FocusListener {
 			dtm.addRow(new String []{s});
 
 		}
-		/*
-		 * for(int i = 0; i<lAcciones.size(); i++){
-		String u = lAcciones.get(i);
-		boolean repetido = false;
-		for(int j = 0; j<i; i++){
-			String s = (String) dtm.getValueAt(j, 0);
-			if(s.equals(u)){
-				repetido = true;
-			}
-
-		}
-		if(!repetido){
-			dtm.addRow(new String []{u});
-
-	}
-		 */
 
 		btnSalir = new JButton("SALIR");
 		btnSalir.addActionListener(new ActionListener() {

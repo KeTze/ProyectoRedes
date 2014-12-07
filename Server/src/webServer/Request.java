@@ -31,7 +31,6 @@ public final class Request implements Runnable {
     }
   }
   
-  //Para realizar la confirmacion:
   private String id_variable;
   private String id_placa;	
   private String accion;
@@ -40,7 +39,6 @@ public final class Request implements Runnable {
   
   
   private void processRequest() throws Exception{
-    // Get the request line of the HTTP request message.
 	 proceso = true;
    while (proceso){
 	   System.out.println("Estado"+estado);
@@ -284,77 +282,7 @@ public final class Request implements Runnable {
 		break;
     }
    }
-/*
-    // Display the request line.
-    //System.out.println();
-    //System.out.println(requestLine);
 
-    // Extract the filename from the request line.
-    StringTokenizer tokens = new StringTokenizer(requestLine);
-    tokens.nextToken(); // skip over the method, which should be "GET"
-    //System.out.println("Next Token: "+tokens.nextToken());
-    String fileName = tokens.nextToken();
-
-    // Prepend a "." so that file request is within the current directory.
-    fileName = "archivos/" + fileName;
-
-    // Open the requested file.
-    FileInputStream fis = null;
-    boolean fileExists = true;
-    try {
-      fis = new FileInputStream(fileName);
-    }
-    catch (FileNotFoundException e) {
-      fileExists = false;
-      System.out.println("No abre fichero");
-    }
-
-    System.out.println("Incoming!!!");
-    System.out.println("1.............." + requestLine);
-
-    // Get and display the header lines.
-    String headerLine = null;
-    while ( (headerLine = sockManager.Leer()).length() != 0) {
-      System.out.println("2.............." + headerLine);
-    }
-
-    // Construct the response message.
-    String statusLine = null;
-    String contentTypeLine = null;
-    String entityBody = null;
-    if (fileExists) {
-      statusLine = "HTTP/1.0 200 OK" + CRLF;
-      contentTypeLine = "Content-type: " + contentType(fileName) + CRLF;
-    }
-    else {
-      statusLine = "HTTP/1.0 404 Not Found" + CRLF;
-      contentTypeLine = "Content-Type: text/html" + CRLF;
-      //entityBody = "<HTML>" + "<HEAD><TITLE>Not Found</TITLE></HEAD>" + "<BODY>Not Found</BODY></HTML>";
-      entityBody = "<HTML><HEAD><TITLE>Not Found</TITLE></HEAD><BODY><font size='6' face='Calibri'>El fichero no ha sido encontrado. Puedes ver cómo puedes dar formato al texto poniendolo, por ejemplo, en <b>negrita</b> o <i>cursiva</i>.</font></BODY></HTML>";
-    }
-
-    // Send the status line.
-    sockManager.Escribir(statusLine);
-
-    // Send the content type line.
-    sockManager.Escribir(contentTypeLine);
-
-    // Send a blank line to indicate the end of the header lines.
-    sockManager.Escribir(CRLF);
-
-    // Send the entity body.
-    if (fileExists) {
-      sendBytes(fis);
-      fis.close();
-    }
-    else {
-      sockManager.Escribir(entityBody);
-    }
-*/
-
-    // Close streams and socket.
-    //sockManager.CerrarStreams();
-    //sockManager.CerrarSocket();
 
   }
 

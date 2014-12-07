@@ -24,10 +24,7 @@ import webServer.Request;
 import webServer.Server;
 
 
-/**
- * Clase que crea la ventana tienda y sus atributos
- *
- */
+
 public class VentanaConectados extends JFrame implements FocusListener {
 	private JTable table = new JTable();
 	private MiModelo dtm;
@@ -60,10 +57,7 @@ public class VentanaConectados extends JFrame implements FocusListener {
 		});
 	}
 
-	/**
-	 * Crea la ventana tienda
-	 * @param usuario que utiliza el programa
-	 */
+
 	public VentanaConectados(Server server) {
 		s = server;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

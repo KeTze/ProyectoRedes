@@ -163,9 +163,7 @@ public class VentanaModificarUsuario extends JFrame{
 		
 		eventos();
 	}
-	private void desactivarBotones(){
-		
-	}
+
 	private void eventos() {
 		btnActualizar.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {

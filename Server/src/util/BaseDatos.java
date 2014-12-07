@@ -150,18 +150,22 @@ public class BaseDatos {
 		}		
 		int numElem = 1;
 		//System.out.println("NumElem: "+numElem);
-		while (rs.next()) {	
-			String s = "ELEM "+numElem+" "+rs.getString("ID")+"; "+rs.getString("ID_VARIABLE")+"; "+rs.getString("FUNCION_PRINC")+"; ";
-			
-			if(rs.getBoolean("ESTADO")){
-				s = s+"ON; ";
-			}else{
-				s = s+"OFF; ";
+		
+		if(rs!=null){
+			while (rs.next()) {	
+		
+				String s = "ELEM "+numElem+" "+rs.getString("ID")+"; "+rs.getString("ID_VARIABLE")+"; "+rs.getString("FUNCION_PRINC")+"; ";
+				
+				if(rs.getBoolean("ESTADO")){
+					s = s+"ON; ";
+				}else{
+					s = s+"OFF; ";
+				}
+				s = s+rs.getString("ID_ACCION");
+				System.out.println(s);
+				aLObjetos.add(s);
+				numElem++;
 			}
-			s = s+rs.getString("ID_ACCION");
-			System.out.println(s);
-			aLObjetos.add(s);
-			numElem++;
 		}
 		rs.close();
 		stat.close();

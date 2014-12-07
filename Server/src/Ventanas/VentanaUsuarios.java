@@ -25,10 +25,7 @@ import javax.swing.BoxLayout;
 
 import util.BaseDatos;
 
-/**
- * Clase que crea la ventana tienda y sus atributos
- *
- */
+
 public class VentanaUsuarios extends JFrame implements FocusListener {
 	private JTable table = new JTable();
 	private MiModelo dtm;
@@ -62,10 +59,7 @@ public class VentanaUsuarios extends JFrame implements FocusListener {
 		});
 	}
 
-	/**
-	 * Crea la ventana tienda
-	 * @param usuario que utiliza el programa
-	 */
+
 	public VentanaUsuarios() {
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
