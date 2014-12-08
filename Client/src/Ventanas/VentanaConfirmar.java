@@ -115,7 +115,7 @@ public class VentanaConfirmar extends JFrame{
 		);
 		getContentPane().setLayout(groupLayout);
 		setResizable(false);
-		setTitle("Control de Invernadero: Login");
+		setTitle("Control de Invernadero: Confirmar");
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -188,8 +188,9 @@ public class VentanaConfirmar extends JFrame{
 							EventQueue.invokeLater(new Runnable() {
 								public void run() {
 									try {
-										VentanaBuscar window1 = new VentanaBuscar();
+										VentanaListado window1 = new VentanaListado(null);
 										window1.setVisible(true);
+										dispose();
 									} catch (Exception e) {
 										e.printStackTrace();
 									}

@@ -131,7 +131,7 @@ public class BaseDatos {
 					+ "WHERE (P.ID=PV.ID_PLACA AND V.ID_VARIABLE=PV.ID_VARIABLE AND A.ID_ACCION=PV.ID_ULTIMA_ACCION AND upper(V.ID_VARIABLE) LIKE upper('"+patron+"'))");
 		}else if(opcion.equalsIgnoreCase("funcion_principal")){
 			rs = stat.executeQuery("select P.ID, V.ID_VARIABLE, V.FUNCION_PRINC, PV.ESTADO, ID_ACCION from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
-					+ "WHERE (P.ID=PV.ID_PLACA AND V.ID_VARIABLE=PV.ID_VARIABLE AND A.ID_ACCION=PV.ID_ULTIMA_ACCION AND upper(V.FUNC_PRINC) LIKE upper('"+patron+"'))");
+					+ "WHERE (P.ID=PV.ID_PLACA AND V.ID_VARIABLE=PV.ID_VARIABLE AND A.ID_ACCION=PV.ID_ULTIMA_ACCION AND upper(V.FUNCION_PRINC) LIKE upper('"+patron+"'))");
 		}else if(opcion.equalsIgnoreCase("estado")){
 			if((patron.equalsIgnoreCase("O_"))||(patron.equalsIgnoreCase("%N"))||(patron.equalsIgnoreCase("_N")||(patron.equalsIgnoreCase("ON")))){
 				rs = stat.executeQuery("select P.ID, V.ID_VARIABLE, V.FUNCION_PRINC, PV.ESTADO, ID_ACCION from PLACA P, VARIABLE V, ACCION A, PL_VAR PV "
